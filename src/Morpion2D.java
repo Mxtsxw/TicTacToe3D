@@ -54,6 +54,9 @@ public class Morpion2D {
     //-1->[x],-2->[O]; 1->x; 2->O ; 0->le numéro de la case en commençant par 1
     public void afficher()
     {
+        System.out.println("________________________________");
+        System.out.println("___ \033[0;33m Affichage du Morpion2D \033[0m ___");
+        System.out.println("________________________________");
         int[] tab=this.tab;
         int n=this.n;
         String[][] grille = new String[n][n];
@@ -62,26 +65,25 @@ public class Morpion2D {
             for (int j = 0; j < n; j++)
             {
                 if (tab[i*n+j]==1)
-                grille[i][j] = "X";
+                    grille[i][j] = " \033[1;31mX\033[0m ";
                 else if (tab[i*n+j]==2)
-                    grille[i][j] = "O";
+                    grille[i][j] = " \033[1;34mO\033[0m ";
                 else if (tab[i*n+j]==-1)
-                    grille[i][j] = "[X]";
+                    grille[i][j] = "\033[1;31m[X]\033[0m";
                 else if (tab[i*n+j]==-2)
-                    grille[i][j] = "[O]";
+                    grille[i][j] = "\033[1;34m[O]\033[0m";
                 else
-                    grille[i][j] = String.valueOf(i*n+j+1); //comme ça la première case est 1 ;
+                    grille[i][j] = " "+String.valueOf(i*n+j+1)+" "; //comme ça la première case est 1 ;
             }
         }
-        System.out.println("_____________________________");
         printGrille(grille,n);
-        System.out.println("_____________________________");
+        System.out.println("________________________________");
     }
 
     //placer dans un tableau à une ligne, joueur correspond au joueur qui joue 1 ou 2
     public void placer(int choix,int joueur)
     {//vérifications choix appartient à [1, n]
-        System.out.println("Je place mon pion");
+        System.out.println("\033[0;33mJe place mon pion :"+ choix +"\033[0m");
         if ((choix>=1)&&(choix<=this.n*this.n))
         {
             this.tab[choix-1]=joueur;
@@ -93,10 +95,9 @@ public class Morpion2D {
     //ce qui fait que lorsque l'on affiche la grille,
     //les cases gagnantes seront affichées avec des []
     //elle appelle ensuite la fonction afficher pour l'afficher
-    public void afficherFin(int[] indices) {
+    public void afficherFin(int[] indices) throws Exception {
         if (indices.length == 0) {
-            System.out.println("Aucun indices donnés");
-            return;
+            throw new Exception("Aucun indice donné");
         }
         else {
             for (int i = 0; i < indices.length; i++) {
@@ -107,7 +108,7 @@ public class Morpion2D {
                         this.tab[indices[i]] = -2;
                     }
                 } else {
-                    System.out.println("Indice non valide : " + indices[i]);
+                    throw new Exception("Indice non valide : " + indices[i]);
                 }
             }
         }
@@ -137,7 +138,7 @@ public class Morpion2D {
         int[] indices = new int[n];
         // vérifie les lignes
         if ((choix < 1) || (choix >n*n)) {
-            System.out.println("l'indice du choix n'a pas la bonne valeure");
+            System.out.println("l'indice du choix n'a pas la bonne valeur");
             return indices;
         }
         else {
@@ -156,7 +157,7 @@ public class Morpion2D {
             int numli = ligne / n;
             for (int k = 0; k < n - 1; k++)//on parcours la ligne de choix
             {
-                if (grille[numli][k] != grille[numli][k + 1] && ((grille[numli][k] != 1) || (grille[numli][k] != 2))) {
+                if (grille[numli][k] != grille[numli][k + 1] ) {
                     testligne = false;
                 } //si ils sont différents ils ne sont pas alignés
                 else {
@@ -177,15 +178,14 @@ public class Morpion2D {
             if (col != 0) //si ce n'est pas le cas on est pas au début de la colonne
             {
                 //on se recentre
-                while (col != 0) {
-                    col = numcol / n;
-                    numcol = numcol - n;
+                while ((numcol>=n) || (numcol < 0)) {
+                    numcol = numcol-n;
                 }
             }
             boolean testcol = true;
             for (int k = 0; k < n - 1; k++)//on parcours la colonne de choix
             {
-                if (grille[k][numcol] != grille[k + 1][numcol] && ((grille[k][numcol] != 1) || (grille[k][numcol] != 2))) {
+                if (grille[k][numcol] != grille[k + 1][numcol] ) {
                     testcol = false;
                 } //si ils sont différents ils ne sont pas alignés
                 else {
@@ -209,7 +209,7 @@ public class Morpion2D {
             int diagoD = choix;
             int numcolD = numcol;
             int numliD = numli;
-            if (numliD != n - 1) //si ce n'est pas le cas on est pas en bas à gauche de la diagonale
+            if ((numliD != n - 1)||(numcolD!=0)) //si ce n'est pas le cas on est pas en bas à gauche de la diagonale
             {
                 //on se recentre
                 while (numliD != n - 1) {
@@ -222,12 +222,12 @@ public class Morpion2D {
                 boolean testdiagoD = true;
                 for (int k = 0; k < n - 1; k++)//on parcours la colonne de choix
                 {
-                    if (grille[numliD - k][numcolD + k] != grille[numliD - (k + 1)][numcolD + k + 1] && ((grille[numliD][numcolD] != 1) || (grille[numliD - k][numcolD] != 2))) {
+                    if (grille[numliD - k][numcolD + k] != grille[numliD - (k + 1)][numcolD + k + 1] ) {
                         testdiagoD = false;
                     } //si ils sont différents ils ne sont pas alignés
                     else {
                         indices[k] = (numliD - k) * n + k;
-                        indices[k + 1] = (numliD - k + 1) * n + k + 1;
+                        indices[k + 1] = (numliD - (k+1)) * n + (k+1);
                     }
                 }
                 if (testdiagoD == false) {
@@ -259,7 +259,7 @@ public class Morpion2D {
                 boolean testdiagoG = true;
                 for (int k = 0; k < n - 1; k++)//on parcours la colonne de choix
                 {
-                    if (grille[numliG - k][numcolG - k] != grille[numliG - (k + 1)][numcolG - (k + 1)] && ((grille[numliG][numcolG] != 1) || (grille[numliG - k][numcolG] != 2))) {
+                    if (grille[numliG - k][numcolG - k] != grille[numliG - (k + 1)][numcolG - (k + 1)] ) {
                         testdiagoG = false;
                     } //si ils sont différents ils ne sont pas alignés
                     else {
