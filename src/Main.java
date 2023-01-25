@@ -14,6 +14,6 @@ public class Main {
         for (int i=0;i< test.length;i++){System.out.println(test[i]);}
         System.out.println("fin verif");
         int[] indices= {0,3,6};
-        Morpion2D.afficherFin(indices);
+
     }
 }

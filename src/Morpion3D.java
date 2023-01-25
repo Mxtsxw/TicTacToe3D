@@ -1,14 +1,18 @@
-public class Morpion3D{
+public class Morpion3D {
+    //Attributs
     // à modifier en fonction du diagramme de classe
     private int n; // largeur du cube de grilles n>=3 pour un prog efficace
     private int[][] tab; //3 grilles pour un 3x3 en 3D, n grilles pour un nxn en 3D:
     //pour tout i tab[k][i] est un tableau int[] contenant la grille de l'étage k (0<k<n-1) et (1<i<n)
 
+    //Constructeurs
     public Morpion3D(int n, int[][] tab) {
         this.n = n;
         this.tab = tab;
     }
+    //Getters & setters
 
+    //Méthodes
     public void placer(int etage, int choix,int joueur)
     {//vérifications choix appartient à [1, n]
         //vérifications étage appartient à [0, n-1]

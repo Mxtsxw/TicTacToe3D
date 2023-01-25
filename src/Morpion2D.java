@@ -1,16 +1,18 @@
 import java.util.Arrays;
 
 public class Morpion2D {
+    //Attributs
     private int n; // largeur de la grille n>=3 pour un prog efficace
     private int[]tab; //tableau de taille nxn de 1, 2 ou de 0 en 1 ligne
 
+    //Constructeurs
     public Morpion2D(int n, int[] tab) {
         super();
         this.n = n;
         this.tab = tab;
     }
 
-
+    //Getters & setters
     public int getN() {
         return n;
     }
@@ -25,7 +27,7 @@ public class Morpion2D {
         return tab;
     }
 
-
+    //Méthodes
     public void setTab(int[] tab) {
         this.tab = tab;
     }
@@ -280,10 +282,39 @@ public class Morpion2D {
 
 
 
-    public int[] finPartie()
-    {
-        int[] indices=new int[this.n];//pour une grille de taille normale 3x3 il faut aligner 3 éléments
-        int[][] grille= grille(); //plus simple pour vérifier si on est aligné
-        return indices;
+    public boolean endGame(int[] tab) {
+        boolean gameOver = false;
+        //Vérification des lignes
+        for (int i = 0; i < 7; i+=3) {
+            if (tab[i] == tab[1 + i] && tab[0] == tab[2 + i]) {
+                gameOver = true;
+                break;
+            }
+        }
+
+        //Vérification des colonnes
+        for (int i = 0; i < 3; i++) {
+            if (tab[i] == tab[3 + i] && tab[0] == tab[6 + i]) {
+                gameOver = true;
+                break;
+            }
+        }
+        //Vérification des diagonales
+        if ((tab[4] == tab[0] && tab[4] == tab[8])||(tab[4] == tab[2] && tab[4] == tab[6])) {
+            gameOver = true;
+        }
+        //Vérification si le tableau est plein
+//        for (int i=0;i< tab.length;i++){
+//            if (!isInteger.tab[i])
+//                gameOver = true;
+//        }
+    }
+
+
+    public void start(){
+        while (!endGame(int[] tab)){
+            Morpion2D.afficher();
+            Morpion2D.placer(
+        }
     }
 }
