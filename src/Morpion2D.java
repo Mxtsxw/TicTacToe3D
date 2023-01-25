@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Morpion2D {
     //Attributs
@@ -283,38 +284,94 @@ public class Morpion2D {
 
 
     public boolean endGame(int[] tab) {
-        boolean gameOver = false;
-        //Vérification des lignes
-        for (int i = 0; i < 7; i+=3) {
-            if (tab[i] == tab[1 + i] && tab[0] == tab[2 + i]) {
-                gameOver = true;
-                break;
+          //Vérification si le tableau est plein
+        for (int i=0;i<tab.length;i++){
+            if (tab[i] == 0)
+                return false;
+        }
+        return true;
+    }
+    public boolean estGagnant(int choice, int n, int[] tab) {
+        // Vérifier les lignes
+        for (int i = 0; i < n; i++) {
+            int c = 0;
+            for (int j = 0; j < n; j++) {
+                if (tab[i*n+j] == choice) {
+                    c++;
+                }
+            }
+            if (c == n) {
+                return true;
             }
         }
-
-        //Vérification des colonnes
-        for (int i = 0; i < 3; i++) {
-            if (tab[i] == tab[3 + i] && tab[0] == tab[6 + i]) {
-                gameOver = true;
-                break;
+        // Vérifier les colonnes
+        for (int j = 0; j < n; j++) {
+            int c = 0;
+            for (int i = 0; i < n; i++) {
+                if (tab[i*n+j] == choice) {
+                    c++;
+                }
+            }
+            if (c == n) {
+                return true;
             }
         }
-        //Vérification des diagonales
-        if ((tab[4] == tab[0] && tab[4] == tab[8])||(tab[4] == tab[2] && tab[4] == tab[6])) {
-            gameOver = true;
+        // Vérifier les diagonales
+        int c = 0;
+        for (int i = 0; i < n; i++) {
+            if (tab[i*n+i] == choice) {
+                c++;
+            }
         }
-        //Vérification si le tableau est plein
-//        for (int i=0;i< tab.length;i++){
-//            if (!isInteger.tab[i])
-//                gameOver = true;
-//        }
+        if (c == n) {
+            return true;
+        }
+        c = 0;
+        for (int i = 0; i < n; i++) {
+            if (tab[i*n+n-1-i] == choice) {
+                c++;
+            }
+        }
+        if (c == n) {
+            return true;
+        }
+        // Aucun alignement gagnant n'a été trouvé
+        return false;
     }
 
 
-    public void start(){
-        while (!endGame(int[] tab)){
-            Morpion2D.afficher();
-            Morpion2D.placer(
+
+    public void start(Morpion2D game){
+        Scanner input = new Scanner(System.in);
+        boolean end =true;
+        int currentPlayer = 1;
+        while (!game.endGame(game.getTab()) && end ){
+            game.afficher();
+            System.out.println("Joueur " + currentPlayer + ", choisi une case (1-" + (getN()*getN()) + "): ");
+            int choice = input.nextInt();
+            while (choice < 1 || choice > getN()*getN() || game.getTab()[choice-1] != 0) {
+                if(choice < 1 || choice > getN()*getN()){
+                    System.out.println("Choix en dehors de la limite du tableau, veuillez réessayer.");
+                }
+                else if(game.getTab()[choice-1] != 0){
+                    System.out.println("Cette case est déjà jouée, veuillez réessayer.");
+                }
+                choice = input.nextInt();
+            }
+            game.placer(choice, currentPlayer);
+            if (estGagnant(choice, n, game.getTab())){
+                end = false;
+            }
+            if (game.endGame(game.getTab())){
+                game.afficher();
+                System.out.println("égalité vous pouvez recommencez");// juste sortir du case 1 pour rerentrer dans le launcher
+            }
+            if (currentPlayer == 1) {
+                currentPlayer = 2;
+            } else {
+                currentPlayer = 1;
+            }
         }
-    }
+        }
+
 }
