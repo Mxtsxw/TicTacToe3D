@@ -206,7 +206,6 @@ public class Morpion2D {
             // _ _ X _
             // _ X _ _
             // X _ _ _
-            int diagoD = choix;
             int numcolD = numcol;
             int numliD = numli;
             if ((numliD != n - 1)||(numcolD!=0)) //si ce n'est pas le cas on est pas en bas à gauche de la diagonale
@@ -243,7 +242,6 @@ public class Morpion2D {
             // _ X _ _
             // _ _ X _
             // _ _ _ X
-            int diagoG = choix;
             int numcolG = numcol;
             int numliG = numli;
             if (numcolG != n - 1) //si ce n'est pas le cas on est pas en bas à droite de la diagonale
