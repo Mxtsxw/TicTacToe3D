@@ -97,168 +97,184 @@ public class Morpion3D{
         afficher();
     }
 
-//    public int[][] grille() {
-//        int[][] grille = new int[this.n][this.n];
-//        for (int i = 0; i < this.n; i++) {
-//            for (int j = 0; j < this.n; j++) {
-//                grille[i][j] = this.tab[i * this.n + j];
-//            }
-//        }
-//        return grille;
-//    }
-//
-//    //prend en para le choix du dernier élément placer (l'indice) et retourne les indices des éléments qui sont alignés
-//    //on va tester si pour cet élément placé, si le joueur a réussi à aligner n éléments
-//    //pour un morpion 3x3 il faut en aligner 3
-//    public int[] alignement(int choix) {
-//        int[][] grille = grille();
-//        int[] tab = this.tab[0];
-//        printGrille(grille, this.n);
-//        System.out.println("_____");
-//        int n = this.n;
-//        int[] indices = new int[n];
-//        // vérifie les lignes
-//        if ((choix < 1) || (choix >n*n)) {
-//            System.out.println("l'indice du choix n'a pas la bonne valeur");
-//            return indices;
-//        }
-//        else {
-//            choix=choix-1; //pour n=3 le choix va de 1 à 9 mais dans un tableau les indices vont de 0 à 8
-//
-//            //pour tester la ligne
-//            int ligne = choix;
-//            if ((ligne) % n != 0) //si ce n'est pas le cas on est pas au début de la ligne
-//            {
-//                //on se recentre
-//                while (ligne%n!=0) {
-//                    ligne = ligne - 1;
-//                }
-//            }
-//            boolean testligne = true;
-//            int numli = ligne / n;
-//            for (int k = 0; k < n - 1; k++)//on parcours la ligne de choix
-//            {
-//                if (grille[numli][k] != grille[numli][k + 1] ) {
-//                    testligne = false;
-//                } //si ils sont différents ils ne sont pas alignés
-//                else {
-//                    indices[k] = numli * n + k;
-//                    indices[k + 1] = numli * n + k + 1;
-//                }
-//            }
-//            if (testligne == false) {
-//                int[] vide = new int[n];
-//                indices = vide;
-//            } else {
-//                return indices;
-//            }
-//
-//            //pour tester la colonne
-//            int numcol = choix;
-//            int col = numcol / n;
-//            if (col != 0) //si ce n'est pas le cas on est pas au début de la colonne
-//            {
-//                //on se recentre
-//                while ((numcol>=n) || (numcol < 0)) {
-//                    numcol = numcol-n;
-//                }
-//            }
-//            boolean testcol = true;
-//            for (int k = 0; k < n - 1; k++)//on parcours la colonne de choix
-//            {
-//                if (grille[k][numcol] != grille[k + 1][numcol] ) {
-//                    testcol = false;
-//                } //si ils sont différents ils ne sont pas alignés
-//                else {
-//                    indices[k] = numcol + k * n;
-//                    indices[k + 1] = numcol + (k + 1) * n;
-//                }
-//            }
-//            if (testcol == false) {
-//                int[] vide = new int[n];
-//                indices = vide;
-//            } else {
-//                return indices;
-//            }
-//
-//            //pour tester les diagonales :
-//            //diagonale droite
-//            // _ _ _ X
-//            // _ _ X _
-//            // _ X _ _
-//            // X _ _ _
-//            int diagoD = choix;
-//            int numcolD = numcol;
-//            int numliD = numli;
-//            if ((numliD != n - 1)||(numcolD!=0)) //si ce n'est pas le cas on est pas en bas à gauche de la diagonale
-//            {
-//                //on se recentre
-//                while (numliD != n - 1) {
-//                    numliD = numliD + 1;
-//                    numcolD = numcolD - 1;
-//                }
-//            }
-//            if (numcolD == 0)//si ce n'est pas le cas, il est impossible de faire une diagonale droite
-//            {
-//                boolean testdiagoD = true;
-//                for (int k = 0; k < n - 1; k++)//on parcours la colonne de choix
-//                {
-//                    if (grille[numliD - k][numcolD + k] != grille[numliD - (k + 1)][numcolD + k + 1] ) {
-//                        testdiagoD = false;
-//                    } //si ils sont différents ils ne sont pas alignés
-//                    else {
-//                        indices[k] = (numliD - k) * n + k;
-//                        indices[k + 1] = (numliD - (k+1)) * n + (k+1);
-//                    }
-//                }
-//                if (testdiagoD == false) {
-//                    int[] vide = new int[n];
-//                    indices = vide;
-//                } else {
-//                    return indices;
-//                }
-//            }
-//
-//            //diagonale gauche
-//            // X _ _ _
-//            // _ X _ _
-//            // _ _ X _
-//            // _ _ _ X
-//            int diagoG = choix;
-//            int numcolG = numcol;
-//            int numliG = numli;
-//            if (numcolG != n - 1) //si ce n'est pas le cas on est pas en bas à droite de la diagonale
-//            {
-//                //on se recentre
-//                while (numcolG != n - 1) {
-//                    numliG = numliG + 1;
-//                    numcolG = numcolG + 1;
-//                }
-//            }
-//            if (numliG == n - 1)//si ce n'est pas le cas, il est impossible de faire une diagonale gauche
-//            {
-//                boolean testdiagoG = true;
-//                for (int k = 0; k < n - 1; k++)//on parcours la colonne de choix
-//                {
-//                    if (grille[numliG - k][numcolG - k] != grille[numliG - (k + 1)][numcolG - (k + 1)] ) {
-//                        testdiagoG = false;
-//                    } //si ils sont différents ils ne sont pas alignés
-//                    else {
-//                        indices[k] = (n * n - 1) - k * (n + 1);
-//                        indices[k + 1] = (n * n - 1) - (k + 1) * (n + 1);
-//                    }
-//                }
-//                if (testdiagoG == false) {
-//                    int[] vide = new int[n];
-//                    indices = vide;
-//                } else {
-//                    return indices;
-//                }
-//            }
-//            return null;
-//        }
-//    }
+    //[ l'étage][ligne] [colonne]
+    public int[][][] grille() {
+        int[][][] etages = new int[this.n][this.n][this.n];
+        int[][] grille = new int[this.n][this.n];
+        for (int k=0; k<this.n; k++) {
+            for (int i = 0; i < this.n; i++) {
+                for (int j = 0; j < this.n; j++) {
+                    grille[i][j] = this.tab[k][i * this.n + j];
+                }
+            }
+            etages[k]=grille;
+        }
+        return etages;
+    }
 
+    //prend en para le choix du dernier élément placer (l'indice) et retourne les indices des éléments qui sont alignés
+    //on va tester si pour cet élément placé, si le joueur a réussi à aligner n éléments
+    //pour un morpion 3x3 il faut en aligner 3
+    //return les étages array [0] PUIS les indices array[1]
+    public Object[] alignement(int etage, int choix) throws Exception {
+        int[][][] grille = grille();
+        System.out.println("_____");
+        int n = this.n;
+        int[] indices = new int[n];
+        int[] etages = new int[n];
+        // vérifie les indices du choix
+        if ((choix < 1) || (choix > n * n) || ((etage < 0) || (etage >= n))) {
+            throw new Exception("Le choix de l'étage ou de la case n'a pas la bonne valeur");
+        }
+        else
+        {
+            choix=choix-1; //pour n=3 le choix va de 1 à 9 mais dans un tableau les indices vont de 0 à 8
+
+            //pour tester la ligne sur le même étage
+            int ligne = choix;
+            if ((ligne) % n != 0) //si ce n'est pas le cas on est pas au début de la ligne
+            {
+                //on se recentre
+                while (ligne%n!=0) {
+                    ligne = ligne - 1;
+                }
+            }
+            boolean testligne = true;
+            int numli = ligne / n;
+            for (int k = 0; k < n - 1; k++)//on parcours la ligne de choix
+            {
+                if (grille [etage][numli][k] != grille[etage][numli][k + 1] ) {
+                    testligne = false;
+                } //s'ils sont différents ils ne sont pas alignés
+                //par défaut, on remplit les indices
+                else {
+                    indices[k] = numli * n + k;
+                    indices[k + 1] = numli * n + k + 1;
+                    etages[k]=etage;
+                }
+            }
+            //si c'est faux on vide les indices
+            if (testligne == false) {
+                int[] vide = new int[n];
+                indices = vide;
+                etages= vide;
+            } else { //sinon on les returns
+                return new int[][]{etages, indices};
+            }
+
+            //pour tester la colonne
+            int numcol = choix;
+            int col = numcol / n;
+            if (col != 0) //si ce n'est pas le cas on est pas au début de la colonne
+            {
+                //on se recentre
+                while ((numcol>=n) || (numcol < 0)) {
+                    numcol = numcol-n;
+                }
+            }
+            boolean testcol = true;
+            for (int k = 0; k < n - 1; k++)//on parcours la colonne de choix
+            {
+                if (grille[k][numcol] != grille[k + 1][numcol] ) {
+                    testcol = false;
+                } //si ils sont différents ils ne sont pas alignés
+                //par défaut on stock les valeurs des indices
+                else {
+                    indices[k] = numcol + k * n;
+                    indices[k + 1] = numcol + (k + 1) * n;
+                    etages[k]=etage;
+                }
+            }
+            //si il s'avère que ils ne sont pas alignés avec ce mode d'alignement on vide les tableaux
+            if (testcol == false) {
+                int[] vide = new int[n];
+                indices = vide;
+                etages=vide;
+            } else {
+                return new int[][]{etages, indices};
+            }
+
+            //pour tester les diagonales :
+            //diagonale droite
+            // _ _ _ X
+            // _ _ X _
+            // _ X _ _
+            // X _ _ _
+            int diagoD = choix;
+            int numcolD = numcol;
+            int numliD = numli;
+            if ((numliD != n - 1)||(numcolD!=0)) //si ce n'est pas le cas on est pas en bas à gauche de la diagonale
+            {
+                //on se recentre
+                while (numliD != n - 1) {
+                    numliD = numliD + 1;
+                    numcolD = numcolD - 1;
+                }
+            }
+            if (numcolD == 0)//si ce n'est pas le cas, il est impossible de faire une diagonale droite
+            {
+                boolean testdiagoD = true;
+                for (int k = 0; k < n - 1; k++)//on parcours la colonne de choix
+                {
+                    if (grille[etage][numliD - k][numcolD + k] != grille[etage][numliD - (k + 1)][numcolD + k + 1] ) {
+                        testdiagoD = false;
+                    } //si ils sont différents ils ne sont pas alignés
+                    else {
+                        indices[k] = (numliD - k) * n + k;
+                        indices[k + 1] = (numliD - (k+1)) * n + (k+1);
+                        etages[k]=etage;
+                    }
+                }
+                if (testdiagoD == false) {
+                    int[] vide = new int[n];
+                    indices = vide;
+                    etages=vide;
+                } else {
+                    return new int[][]{etages, indices};
+                }
+            }
+
+            //diagonale gauche
+            // X _ _ _
+            // _ X _ _
+            // _ _ X _
+            // _ _ _ X
+            int diagoG = choix;
+            int numcolG = numcol;
+            int numliG = numli;
+            if (numcolG != n - 1) //si ce n'est pas le cas on est pas en bas à droite de la diagonale
+            {
+                //on se recentre
+                while (numcolG != n - 1) {
+                    numliG = numliG + 1;
+                    numcolG = numcolG + 1;
+                }
+            }
+            if (numliG == n - 1)//si ce n'est pas le cas, il est impossible de faire une diagonale gauche
+            {
+                boolean testdiagoG = true;
+                for (int k = 0; k < n - 1; k++)//on parcours la colonne de choix
+                {
+                    if (grille[etage][numliG - k][numcolG - k] != grille[etage][numliG - (k + 1)][numcolG - (k + 1)]) {
+                        testdiagoG = false;
+                    } //si ils sont différents ils ne sont pas alignés
+                    else {
+                        indices[k] = (n * n - 1) - k * (n + 1);
+                        indices[k + 1] = (n * n - 1) - (k + 1) * (n + 1);
+                        etages[k]=etage;
+                    }
+                }
+                if (testdiagoG == false) {
+                    int[] vide = new int[n];
+                    indices = vide;
+                    etages=vide;
+                } else {
+                    return new int[][]{etages, indices};
+                }
+            }
+        }
+        return new int[][]{null, null};
+    }
 
 }
 

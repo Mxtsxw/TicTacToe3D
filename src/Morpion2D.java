@@ -129,19 +129,19 @@ public class Morpion2D {
     //prend en para le choix du dernier élément placer (l'indice) et retourne les indices des éléments qui sont alignés
     //on va tester si pour cet élément placé, si le joueur a réussi à aligner n éléments
     //pour un morpion 3x3 il faut en aligner 3
-    public int[] alignement(int choix) {
+    public int[] alignement(int choix) throws Exception{
         int[][] grille = grille();
         int[] tab = this.tab;
         printGrille(grille, this.n);
         System.out.println("_____");
         int n = this.n;
         int[] indices = new int[n];
-        // vérifie les lignes
+        // vérifie les indices donnés
         if ((choix < 1) || (choix >n*n)) {
-            System.out.println("l'indice du choix n'a pas la bonne valeur");
-            return indices;
+            throw new Exception("Indice du choix incorrect");
         }
-        else {
+        else
+        {
             choix=choix-1; //pour n=3 le choix va de 1 à 9 mais dans un tableau les indices vont de 0 à 8
 
             //pour tester la ligne
@@ -275,6 +275,21 @@ public class Morpion2D {
                 }
             }
             return null;
+        }
+    }
+
+    //prends en para le retour de alignement(choix)
+    //alignement() est utilisée après chaque placement pour vérifier si 3 pions sont alignés pour le placement
+    //elle retourne les indices des pions alignés si c'est le cas
+    //sinon elle retourne un tableau vide
+    //endgame permet de savoir si la partie est finie ou non
+    public boolean endgame(int[] indices)
+    {
+        if (indices==null){
+            return false;
+        }
+        else{
+            return true;
         }
     }
 
