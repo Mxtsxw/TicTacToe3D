@@ -9,18 +9,32 @@ public class Morpion3D{
         this.tab = tab;
     }
 
-    public void placer(int etage, int choix,int joueur)
+    //placer dans un tableau à une ligne, joueur correspond au joueur qui joue 1 ou 2
+    //return boolean, true si le pion a été placé, false sinon
+    public boolean placer(int etage,int choix,int joueur)
     {//vérifications choix appartient à [1, n]
-        //vérifications étage appartient à [0, n-1]
-        System.out.println("\033[0;33mJe place mon pion {étage :"+ etage +"; choix :"+choix+"}\033[0m");
         if ((choix>=1)&&(choix<=this.n*this.n))
         {
-            this.tab[etage][choix-1]=joueur;
+            if (joueur==1){
+                if (this.tab[etage][choix-1]!=2)
+                {
+                    System.out.println("\033[0;33mLe joueur "+joueur+" place son pion {étage :"+ etage +"; choix :"+choix+"}\033[0m");
+                    this.tab[etage][choix-1]=joueur;
+                    return true;
+                }
+            }
+            else if (joueur==2) {
+                if (this.tab[etage][choix-1]!=1)
+                {
+                    System.out.println("\033[0;33mLe joueur "+joueur+" place son pion {étage :"+ etage +"; choix :"+choix+"}\033[0m");
+                    this.tab[etage][choix-1]=joueur;
+                    return true;
+                }
+
+            }
         }
-        else
-        {
-            System.out.println("Choix non valide");
-        }
+        System.out.println("\033[0;33mImpossible de placer le pion, la case est occupée\033[0m");
+        return false;
     }
 
     //fonction auxiliaire de afficher, permet d'afficher une grille n*n
@@ -41,6 +55,17 @@ public class Morpion3D{
         }
     }
 
+    public String printspaces(int mult)
+    {
+        if (mult<=0) return "";
+        String spaces=" ";
+        for (int i=0; i<mult; i++)
+        {
+            spaces+=" ";
+        }
+        return spaces;
+    }
+
     //fonction d'affichage, transforme le tableau de tableaux de Morpion3D en 3 grilles nxn
     public void afficher()
     {
@@ -49,20 +74,37 @@ public class Morpion3D{
         System.out.println("________________________________");
         int[][] tab=this.tab;
         int n=this.n;
+        int spacesmax=String.valueOf((n-1)*n+(n-1)+1).length()/2;
+        if (spacesmax<3){spacesmax=3/3;}
+        String espacements1=printspaces(spacesmax);
+        String espacements2=printspaces(spacesmax-1);
         String[][] grille = new String[n][n];
         for (int k=0; k<n; k++){
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
                     if (tab[k][i * n + j] == 1)
-                        grille[i][j] = " \033[1;31mX\033[0m ";
+                        grille[i][j] = espacements1 +"\033[1;31mX\033[0m"+espacements1;
                     else if (tab[k][i * n + j] == 2)
-                        grille[i][j] = " \033[1;34mO\033[0m ";
+                        grille[i][j] = espacements1+"\033[1;34mO\033[0m"+espacements1;
                     else if (tab[k][i * n + j] == -1)
-                        grille[i][j] = "\033[1;31m[X]\033[0m";
+                        grille[i][j] = espacements1+"\033[1;31m[X]\033[0m"+espacements2;
                     else if (tab[k][i * n + j] == -2)
-                        grille[i][j] = "\033[1;34m[O]\033[0m";
+                        grille[i][j] = espacements1+"\033[1;34m[O]\033[0m"+espacements2;
                     else
-                        grille[i][j] = " " + String.valueOf(i * n + j + 1) + " "; //comme ça la première case est 1 ;
+                    {
+                        String p=String.valueOf(i*n+j+1);
+                        int spaces=p.length();
+                        int x=spacesmax-spaces;
+                        if (spaces%2==0) //si c'est pair
+                        {
+                            if (spacesmax - spaces - 1 <= 0) {
+                                x = spacesmax - spaces - 1;
+                            }
+                            grille[i][j] = printspaces(spacesmax - spaces - 1) + p + printspaces(x); //comme ça la première case est 1 ;
+                        }
+                        else
+                            grille[i][j] = espacements1+ p +espacements1; //comme ça la première case est 1 ;
+                    }
                 }
             }
             System.out.println("___ \033[0;33m étage : "+ String.valueOf(k)+" \033[0m __________");
@@ -94,6 +136,7 @@ public class Morpion3D{
                 }
             }
         }
+        System.out.println("j suis passé par là");
         afficher();
     }
 
@@ -129,8 +172,258 @@ public class Morpion3D{
         else
         {
             choix=choix-1; //pour n=3 le choix va de 1 à 9 mais dans un tableau les indices vont de 0 à 8
+            //Pour tester les diagos des bords
+
+            //8diagos sur les bords
+
+            //cas diagoaa1
+            // x 2 3 | 1 2 3 | 1 2 3
+            // 4 5 6 | x 5 6 | 4 5 6
+            // 7 8 9 | 7 8 9 | x 8 9
+            int diagoaa1etage = etage;
+            int numliaa1 = choix/n;
+            int numcolaa1 = choix-(n*numliaa1);
+            while (diagoaa1etage!=0) //si etage!=0, on n'est pas en bas du cube
+            {   //on se recentre
+                numliaa1 = numliaa1 - 1;
+                diagoaa1etage=diagoaa1etage-1;
+            }
+            if ((numliaa1 ==0)&&(numcolaa1==0))//si ce n'est pas le cas, il est impossible de faire une diagoaa1
+            {
+                boolean testdiagoaa1 = true;
+                for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
+                {
+                    if (grille[k][numliaa1+k][numcolaa1] != grille[k][numliaa1+k+1][numcolaa1]) {
+                        testdiagoaa1 = false;//s'ils sont différents ils ne sont pas alignés
+                    }
+                    else {
+                        indices[k] = n * (numliaa1+k) +numcolaa1;
+                        indices[k + 1] = n *(numliaa1+k+1) +numcolaa1;
+                        etages[k]=k;
+                    }
+                }
+                if (testdiagoaa1 == false) {
+                    int[] vide = new int[n];
+                    indices = vide;
+                    etages=vide;
+                } else {
+                    return new int[][]{etages, indices};
+                }
+            }
+            //cas diagoaa1bis
+            // 1 2 x | 1 2 3 | 1 2 3
+            // 4 5 6 | 4 5 x | 4 5 6
+            // 7 8 9 | 7 8 9 | 7 8 x
+            if ((numliaa1 ==0)&&(numcolaa1==n-1))//si ce n'est pas le cas, il est impossible de faire une diagoaa1bis
+            {
+                boolean testdiagoaa1 = true;
+                for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
+                {
+                    if (grille[k][numliaa1+k][numcolaa1] != grille[k][numliaa1+k+1][numcolaa1]) {
+                        testdiagoaa1 = false;//s'ils sont différents ils ne sont pas alignés
+                    }
+                    else {
+                        indices[k] = n * (numliaa1+k) +numcolaa1;
+                        indices[k + 1] = n *(numliaa1+k+1) +numcolaa1;
+                        etages[k]=k;
+                    }
+                }
+                if (testdiagoaa1 == false) {
+                    int[] vide = new int[n];
+                    indices = vide;
+                    etages=vide;
+                } else {
+                    return new int[][]{etages, indices};
+                }
+            }
+
+            //cas diagoaa2
+            // 1 2 3 | 1 2 3 | x 2 3
+            // 4 5 6 | x 5 6 | 4 5 6
+            // x 8 9 | 7 8 9 | 7 8 9
+            int diagoaa2etage = etage;
+            int numliaa2 = choix/n;
+            int numcolaa2 = choix-(n*numliaa2);
+            while (diagoaa2etage!=0) //si etage!=0, on n'est pas en bas du cube
+            {   //on se recentre
+                numliaa2 = numliaa2 + 1;
+                diagoaa2etage=diagoaa2etage-1;
+            }
+            if ((numliaa2 ==n-1)&&(numcolaa2==0))//si ce n'est pas le cas, il est impossible de faire une diagoaa1
+            {
+                boolean testdiagoaa2 = true;
+                for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
+                {
+                    if (grille[k][numliaa2-k][numcolaa2] != grille[k][numliaa2-(k+1)][numcolaa2]) {
+                        testdiagoaa2 = false;//s'ils sont différents ils ne sont pas alignés
+                    }
+                    else {
+                        indices[k] = n * (numliaa2-k) +numcolaa2;
+                        indices[k + 1] = n *(numliaa2-(k+1)) +numcolaa2;
+                        etages[k]=k;
+                    }
+                }
+                if (testdiagoaa2 == false) {
+                    int[] vide = new int[n];
+                    indices = vide;
+                    etages=vide;
+                } else {
+                    return new int[][]{etages, indices};
+                }
+            }
+            //cas diagoaa2bis
+            // 1 2 3 | 1 2 3 | 1 2 x
+            // 4 5 6 | 4 5 x | 4 5 6
+            // 7 8 x | 7 8 9 | 7 8 9
+            if ((numliaa2 ==n-1)&&(numcolaa2==n-1))//si ce n'est pas le cas, il est impossible de faire une diagoaa1
+            {
+                boolean testdiagoaa2 = true;
+                for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
+                {
+                    if (grille[k][numliaa2-k][numcolaa2] != grille[k][numliaa2-(k+1)][numcolaa2]) {
+                        testdiagoaa2 = false;//s'ils sont différents ils ne sont pas alignés
+                    }
+                    else {
+                        indices[k] = n * (numliaa2-k) +numcolaa2;
+                        indices[k + 1] = n *(numliaa2-(k+1)) +numcolaa2;
+                        etages[k]=k;
+                    }
+                }
+                if (testdiagoaa2 == false) {
+                    int[] vide = new int[n];
+                    indices = vide;
+                    etages=vide;
+                } else {
+                    return new int[][]{etages, indices};
+                }
+            }
+
+
+            //cas diagobb1
+            // 1 2 3 | 1 2 3 | 1 2 3
+            // 4 5 6 | 4 5 6 | 4 5 6
+            // x 8 9 | 7 x 9 | 7 8 x
+            int diagobb1etage = etage;
+            int numlibb1 = choix/n;
+            int numcolbb1 = choix-(n*numlibb1);
+            while (diagobb1etage!=0) //si etage!=0, on n'est pas en bas du cube
+            {   //on se recentre
+                numcolbb1 = numcolbb1 + 1;
+                diagobb1etage=diagobb1etage-1;
+            }
+            if ((numlibb1 ==n-1)&&(numcolbb1==0))//si ce n'est pas le cas, il est impossible de faire une diagobb1
+            {
+                boolean testdiagobb1 = true;
+                for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
+                {
+                    if (grille[k][numlibb1][numcolbb1 + k] != grille[k][numlibb1][numcolbb1 + (k + 1)]) {
+                        testdiagobb1 = false;//s'ils sont différents ils ne sont pas alignés
+                    }
+                    else {
+                        indices[k] = n * numlibb1 +numcolbb1 + k;
+                        indices[k + 1] = n * numlibb1 +numcolbb1 + (k + 1);
+                        etages[k]=k;
+                    }
+                }
+                if (testdiagobb1 == false) {
+                    int[] vide = new int[n];
+                    indices = vide;
+                    etages=vide;
+                } else {
+                    return new int[][]{etages, indices};
+                }
+            }
+            //cas diagobb1bis
+            // x 2 3 | 1 x 3 | 1 2 x
+            // 4 5 6 | 4 5 6 | 4 5 6
+            // 7 8 9 | 7 8 9 | 7 8 9
+            if ((numlibb1 ==0)&&(numcolbb1==0))//si ce n'est pas le cas, il est impossible de faire une diagobb1bis
+            {
+                boolean testdiagobb1 = true;
+                for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
+                {
+                    if (grille[k][numlibb1][numcolbb1 + k] != grille[k][numlibb1][numcolbb1 + (k + 1)]) {
+                        testdiagobb1 = false;//s'ils sont différents ils ne sont pas alignés
+                    }
+                    else {
+                        indices[k] = n * numlibb1 +numcolbb1 + k;
+                        indices[k + 1] = n * numlibb1 +numcolbb1 + (k + 1);
+                        etages[k]=k;
+                    }
+                }
+                if (testdiagobb1 == false) {
+                    int[] vide = new int[n];
+                    indices = vide;
+                    etages=vide;
+                } else {
+                    return new int[][]{etages, indices};
+                }
+            }
+
+            //cas diagobb2
+            // 1 2 3 | 1 2 3 | 1 2 3
+            // 4 5 6 | 4 5 6 | 4 5 6
+            // 7 8 x | 7 x 9 | x 8 9
+            int diagobb2etage = etage;
+            int numlibb2 = choix/n;
+            int numcolbb2 = choix-(n*numlibb2);
+            while (diagobb2etage!=0) //si etage!=0, on n'est pas en bas du cube
+            {   //on se recentre
+                numcolbb2 = numcolbb2 + 1;
+                diagobb2etage=diagobb2etage-1;
+            }
+            if ((numlibb2 ==n-1)&&(numcolbb2==n-1))//si ce n'est pas le cas, il est impossible de faire une diagobb2
+            {
+                boolean testdiagobb2 = true;
+                for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
+                {
+                    if (grille[k][numlibb2][numcolbb2 - k] != grille[k][numlibb2][numcolbb2 - (k + 1)]) {
+                        testdiagobb2 = false;//s'ils sont différents ils ne sont pas alignés
+                    }
+                    else {
+                        indices[k] = n * numlibb2 +numcolbb2 - k;
+                        indices[k + 1] = n * numlibb2 +numcolbb2 - (k + 1);
+                        etages[k]=k;
+                    }
+                }
+                if (testdiagobb2 == false) {
+                    int[] vide = new int[n];
+                    indices = vide;
+                    etages=vide;
+                } else {
+                    return new int[][]{etages, indices};
+                }
+            }
+            //cas diagobb2bis
+            // 1 2 x | 1 x 3 | x 2 3
+            // 4 5 6 | 4 5 6 | 4 5 6
+            // 7 8 9 | 7 8 9 | 7 8 9
+            if ((numlibb2 ==0)&&(numcolbb2==n-1))//si ce n'est pas le cas, il est impossible de faire une diagobb2bis
+            {
+                boolean testdiagobb2 = true;
+                for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
+                {
+                    if (grille[k][numlibb2][numcolbb2 - k] != grille[k][numlibb2][numcolbb2 - (k + 1)]) {
+                        testdiagobb2 = false;//s'ils sont différents ils ne sont pas alignés
+                    }
+                    else {
+                        indices[k] = n * numlibb2 +numcolbb2 - k;
+                        indices[k + 1] = n * numlibb2 +numcolbb2 - (k + 1);
+                        etages[k]=k;
+                    }
+                }
+                if (testdiagobb2 == false) {
+                    int[] vide = new int[n];
+                    indices = vide;
+                    etages=vide;
+                } else {
+                    return new int[][]{etages, indices};
+                }
+            }
+
+
             //pour tester sur des ETAGES DIFFERENTS
-            //4 diagos
+            //4 diagos étages
 
             //cas diagoG2
             // x 2 3 | 1 2 3 | 1 2 3
