@@ -16,13 +16,13 @@ public class Main {
 //            Morpion2D.afficherFin(test);
 
             //Morpion3D
-            int [][] tab3d={{1,0,0,-2,0,0,1,2,1},{0,0,0,0,0,2,1,2,1},{1,0,0,2,0,1,1,2,1}};
+            int [][] tab3d={{1,0,0,2,0,0,1,2,1},{0,0,0,0,0,2,1,2,1},{1,0,0,2,0,1,1,2,1}};
             Morpion3D Morpion3D=new Morpion3D(3,tab3d);
             Morpion3D.afficher();
             Morpion3D.placer(2,5,2);
             Morpion3D.placer(2,5,1);
             Morpion3D.placer(1,5,2);
-            Morpion3D.placer(0,5,1);
+            Morpion3D.placer(0,5,2);
             Morpion3D.afficher();
 //            int [] indices={7,7,7};
 //            int [] etages= {0,1,2};
