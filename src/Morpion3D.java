@@ -172,32 +172,20 @@ public class Morpion3D{
             //Pour tester les diagos des bords
 
             //4diagos centrales
-            //cas diagoch1
-            // 1 2 3 | 1 2 3 | 1 2 3
-            // x 5 6 | 4 x 6 | 4 5 x
-            // 7 8 9 | 7 8 9 | 7 8 9
-
-            //cas diagoch2
-            // 1 2 3 | 1 2 3 | 1 2 3
-            // 4 5 x | 4 x 6 | x 5 6
-            // 7 8 9 | 7 8 9 | 7 8 9
-
-            //cas diagocv1
-            // 1 2 3 | 1 2 3 | 1 x 3
-            // 4 5 6 | 4 x 6 | 4 5 6
-            // 7 x 9 | 7 8 9 | 7 8 9
-
-            //cas diagocv2
-            // 1 2 3 | 1 2 3 | 1 x 3
-            // 4 5 6 | 4 x 6 | 4 5 6
-            // 7 x 9 | 7 8 9 | 7 8 9
-
             //8diagos sur les bords
 
             //cas diagoaa1
             // x 2 3 | 1 2 3 | 1 2 3
             // 4 5 6 | x 5 6 | 4 5 6
             // 7 8 9 | 7 8 9 | x 8 9
+            //cas diagoaa1bis
+            // 1 2 x | 1 2 3 | 1 2 3
+            // 4 5 6 | 4 5 x | 4 5 6
+            // 7 8 9 | 7 8 9 | 7 8 x
+            //cas diagocv1
+            // 1 x 3 | 1 2 3 | 1 2 3
+            // 4 5 6 | 4 x 6 | 4 5 6
+            // 7 8 9 | 7 8 9 | 7 x 9
             int numetage = etage;
             int numli = choix/n;
             int numcol = choix-(n*numli);
@@ -206,34 +194,7 @@ public class Morpion3D{
                 numli = numli - 1;
                 numetage=numetage-1;
             }
-            if ((numli ==0)&&(numcol==0))//si ce n'est pas le cas, il est impossible de faire une diagoaa1
-            {
-                boolean test = true;
-                for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
-                {
-                    if (grille[k][numli+k][numcol] != grille[k][numli+k+1][numcol]) {
-                        test = false;//s'ils sont différents ils ne sont pas alignés
-                    }
-                    else {
-                        indices[k] = n * (numli+k) +numcol;
-                        indices[k + 1] = n *(numli+k+1) +numcol;
-                        etages[k]=k;
-                        etages[k+1]=k+1;
-                    }
-                }
-                if (test == false) {
-                    int[] vide = new int[n];
-                    indices = vide;
-                    etages=vide;
-                } else {
-                    return new int[][]{etages, indices};
-                }
-            }
-            //cas diagoaa1bis
-            // 1 2 x | 1 2 3 | 1 2 3
-            // 4 5 6 | 4 5 x | 4 5 6
-            // 7 8 9 | 7 8 9 | 7 8 x
-            if ((numli ==0)&&(numcol==n-1))//si ce n'est pas le cas, il est impossible de faire une diagoaa1bis
+            if (numli ==0)//si ce n'est pas le cas, il est impossible de faire une diagoaa1
             {
                 boolean test = true;
                 for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
@@ -261,6 +222,14 @@ public class Morpion3D{
             // 1 2 3 | 1 2 3 | x 2 3
             // 4 5 6 | x 5 6 | 4 5 6
             // x 8 9 | 7 8 9 | 7 8 9
+            //cas diagoaa2bis
+            // 1 2 3 | 1 2 3 | 1 2 x
+            // 4 5 6 | 4 5 x | 4 5 6
+            // 7 8 x | 7 8 9 | 7 8 9
+            //cas diagocv2
+            // 1 2 3 | 1 2 3 | 1 x 3
+            // 4 5 6 | 4 x 6 | 4 5 6
+            // 7 x 9 | 7 8 9 | 7 8 9
             numetage = etage;
             numli = choix/n;
             numcol = choix-(n*numli);
@@ -269,7 +238,7 @@ public class Morpion3D{
                 numli = numli + 1;
                 numetage=numetage-1;
             }
-            if ((numli ==n-1)&&(numcol==0))//si ce n'est pas le cas, il est impossible de faire une diagoaa1
+            if (numli ==n-1)//si ce n'est pas le cas, il est impossible de faire une diagoaa1
             {
                 boolean test = true;
                 for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
@@ -292,39 +261,19 @@ public class Morpion3D{
                     return new int[][]{etages, indices};
                 }
             }
-            //cas diagoaa2bis
-            // 1 2 3 | 1 2 3 | 1 2 x
-            // 4 5 6 | 4 5 x | 4 5 6
-            // 7 8 x | 7 8 9 | 7 8 9
-            if ((numli ==n-1)&&(numcol==n-1))//si ce n'est pas le cas, il est impossible de faire une diagoaa1
-            {
-                boolean test = true;
-                for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
-                {
-                    if (grille[k][numli-k][numcol] != grille[k][numli-(k+1)][numcol]) {
-                        test = false;//s'ils sont différents ils ne sont pas alignés
-                    }
-                    else {
-                        indices[k] = n * (numli-k) +numcol;
-                        indices[k + 1] = n *(numli-(k+1)) +numcol;
-                        etages[k]=k;
-                        etages[k+1]=k+1;
-                    }
-                }
-                if (test == false) {
-                    int[] vide = new int[n];
-                    indices = vide;
-                    etages=vide;
-                } else {
-                    return new int[][]{etages, indices};
-                }
-            }
-
 
             //cas diagobb1
             // 1 2 3 | 1 2 3 | 1 2 3
             // 4 5 6 | 4 5 6 | 4 5 6
             // x 8 9 | 7 x 9 | 7 8 x
+            //cas diagobb1bis
+            // x 2 3 | 1 x 3 | 1 2 x
+            // 4 5 6 | 4 5 6 | 4 5 6
+            // 7 8 9 | 7 8 9 | 7 8 9
+            //cas diagoch1
+            // 1 2 3 | 1 2 3 | 1 2 3
+            // x 5 6 | 4 x 6 | 4 5 x
+            // 7 8 9 | 7 8 9 | 7 8 9
             numetage = etage;
             numli = choix/n;
             numcol = choix-(n*numli);
@@ -333,34 +282,7 @@ public class Morpion3D{
                 numcol = numcol + 1;
                 numetage=numetage-1;
             }
-            if ((numli ==n-1)&&(numcol==0))//si ce n'est pas le cas, il est impossible de faire une diagobb1
-            {
-                boolean test = true;
-                for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
-                {
-                    if (grille[k][numli][numcol + k] != grille[k][numli][numcol + (k + 1)]) {
-                        test = false;//s'ils sont différents ils ne sont pas alignés
-                    }
-                    else {
-                        indices[k] = n * numli +numcol + k;
-                        indices[k + 1] = n * numli +numcol + (k + 1);
-                        etages[k]=k;
-                        etages[k+1]=k+1;
-                    }
-                }
-                if (test == false) {
-                    int[] vide = new int[n];
-                    indices = vide;
-                    etages=vide;
-                } else {
-                    return new int[][]{etages, indices};
-                }
-            }
-            //cas diagobb1bis
-            // x 2 3 | 1 x 3 | 1 2 x
-            // 4 5 6 | 4 5 6 | 4 5 6
-            // 7 8 9 | 7 8 9 | 7 8 9
-            if ((numli ==0)&&(numcol==0))//si ce n'est pas le cas, il est impossible de faire une diagobb1bis
+            if (numcol==0)//si ce n'est pas le cas, il est impossible de faire une diagobb1
             {
                 boolean test = true;
                 for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
@@ -388,6 +310,14 @@ public class Morpion3D{
             // 1 2 3 | 1 2 3 | 1 2 3
             // 4 5 6 | 4 5 6 | 4 5 6
             // 7 8 x | 7 x 9 | x 8 9
+            //cas diagobb2bis
+            // 1 2 x | 1 x 3 | x 2 3
+            // 4 5 6 | 4 5 6 | 4 5 6
+            // 7 8 9 | 7 8 9 | 7 8 9
+            //cas diagoch2
+            // 1 2 3 | 1 2 3 | 1 2 3
+            // 4 5 x | 4 x 6 | x 5 6
+            // 7 8 9 | 7 8 9 | 7 8 9
             numetage = etage;
             numli = choix/n;
             numcol = choix-(n*numli);
@@ -396,7 +326,7 @@ public class Morpion3D{
                 numcol = numcol + 1;
                 numetage=numetage-1;
             }
-            if ((numli ==n-1)&&(numcol==n-1))//si ce n'est pas le cas, il est impossible de faire une diagobb2
+            if (numcol==n-1)//si ce n'est pas le cas, il est impossible de faire une diagobb2
             {
                 boolean test = true;
                 for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
@@ -419,34 +349,6 @@ public class Morpion3D{
                     return new int[][]{etages, indices};
                 }
             }
-            //cas diagobb2bis
-            // 1 2 x | 1 x 3 | x 2 3
-            // 4 5 6 | 4 5 6 | 4 5 6
-            // 7 8 9 | 7 8 9 | 7 8 9
-            if ((numli ==0)&&(numcol==n-1))//si ce n'est pas le cas, il est impossible de faire une diagobb2bis
-            {
-                boolean test = true;
-                for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
-                {
-                    if (grille[k][numli][numcol - k] != grille[k][numli][numcol - (k + 1)]) {
-                        test = false;//s'ils sont différents ils ne sont pas alignés
-                    }
-                    else {
-                        indices[k] = n * numli +numcol - k;
-                        indices[k + 1] = n * numli +numcol - (k + 1);
-                        etages[k]=k;
-                        etages[k+1]=k+1;
-                    }
-                }
-                if (test == false) {
-                    int[] vide = new int[n];
-                    indices = vide;
-                    etages=vide;
-                } else {
-                    return new int[][]{etages, indices};
-                }
-            }
-
 
             //pour tester sur des ETAGES DIFFERENTS (et pas sur les faces)
             //4 diagos étages
