@@ -1,36 +1,78 @@
 package Morpions;
 
+/**
+ * Classe Morpion2D
+ * extends Morpion
+ */
 public class Morpion2D {
-    private int n; // largeur de la grille n>=3 pour un prog efficace
-    private int[]tab; //tableau de taille nxn de 1, 2 ou de 0 en 1 ligne
+    private int taille; // Largeur de la grille n>=3 pour un prog efficace
+    private int[] tab;  // Tableau en une dimension de taille nxn → reprénsente la grille de dimension nxn de 1, 2 ou de 0.
+
 
     public Morpion2D(int n, int[] tab) {
+        /**
+         * Constructeur avec spécification de la taille et préinitialisation de la grille
+         * @param n int : la dimension de la grille nxn
+         * @param tab int[] : la grille à laquelle on veut initialiser la grille
+         */
         super();
-        this.n = n;
+        this.taille = n;
         this.tab = tab;
     }
 
+    public Morpion2D(){
+        /**
+         * Constructeur par défaut, la dimension de la grille est de 3x3
+         */
+        super();
+        this.taille = 3;
+        this.tab = new int[3*3];
 
-    public int getN() {
-        return n;
+    }
+
+    /**
+     * Réinitialise la grille
+     */
+    public void init(){
+        this.tab = new int[this.taille * this.taille];
+    }
+
+    /**
+     * @return taille la taille de de la grille
+     */
+    public int getTaille() {
+        return taille;
     }
 
 
-    public void setN(int n) {
-        this.n = n;
+    /**
+     * @param taille int la nouvelle taille de la grille
+     */
+    public void setTaille(int taille) {
+        this.taille = taille;
     }
 
 
+    /**
+     * @return tab int[] l'état de la grille
+     */
     public int[] getTab() {
         return tab;
     }
 
 
+    /**
+     * @param tab int[] l'état de la nouvelle grille
+     */
     public void setTab(int[] tab) {
         this.tab = tab;
     }
 
-    //fonction auxiliaire de afficher, permet d'afficher une grille n*n
+    /**
+     * Fonction auxiliaire de afficher, permet d'afficher une grille n*n
+     * @param grid String[][] la grille sous forme de matrice nxn
+     * @param n int les dimension de la grille
+     */
     public static void printGrille(String[][] grid, int n) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -39,6 +81,12 @@ public class Morpion2D {
             System.out.println();
         }
     }
+
+    /**
+     * Fonction auxiliaire de afficher, permet d'afficher une grille n*n
+     * @param grid int[][] la grille sous forme de matrice nxn
+     * @param n int les dimension de la grille
+     */
     public static void printGrille(int[][] grid, int n) {
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
@@ -48,8 +96,12 @@ public class Morpion2D {
         }
     }
 
-    //fonction auxiliaire de afficher qui permet de générer le bon nombre d'espace en fonction d'un entier
-    public String printspaces(int mult)
+    /**
+     * Fonction auxiliaire de afficher qui permet de générer le bon nombre d'espace en fonction d'un entier
+     * @param mult
+     * @return int le nombre d'escpace pour un bon affichage
+     */
+    public String printSpaces(int mult)
     {
         if (mult<=0) return "";
         String spaces=" ";
@@ -60,22 +112,32 @@ public class Morpion2D {
         return spaces;
     }
 
-    //prend n, la taille de la grille (n*n) et un tableau d'une ligne
-    //valeur def par la classe
-    //affiche dans la console une grille avec les correspondance adéquate
-    //-1->[x],-2->[O]; 1->x; 2->O ; 0->le numéro de la case en commençant par 1
+
+    /**
+     * Fonction qui affiche l'état du morpion dans la grille
+     * Description :
+     * 1 → [x],
+     * 2 → [O],
+     * 1 → x;
+     * 2 → O;
+     */
     public void afficher()
     {
         System.out.println("________________________________");
         System.out.println("___ \033[0;33m Affichage du Morpion2D \033[0m ___");
         System.out.println("________________________________");
-        int[] tab=this.tab;
-        int n=this.n;
+
+
+        int[] tab = this.tab;
+        int n = this.taille;
+
         int spacesmax=String.valueOf((n-1)*n+(n-1)+1).length()/2;
         if (spacesmax<3){spacesmax=3/3;}
-        String espacements1=printspaces(spacesmax);
-        String espacements2=printspaces(spacesmax-1);
+        String espacements1 = printSpaces(spacesmax);
+        String espacements2 = printSpaces(spacesmax-1);
+
         String[][] grille = new String[n][n];
+
         for (int i = 0; i < n; i++)
         {
             for (int j = 0; j < n; j++)
@@ -92,13 +154,15 @@ public class Morpion2D {
                     String p = String.valueOf(i * n + j + 1);
                     int spaces = p.length();
                     if (spaces % 2 == 0) //si c'est pair
-                        grille[i][j] = printspaces(spacesmax - spaces - 1) + p + printspaces(spacesmax - spaces); //comme ça la première case est 1 ;
+                        grille[i][j] = printSpaces(spacesmax - spaces - 1) + p + printSpaces(spacesmax - spaces); //comme ça la première case est 1 ;
                     else
-                        grille[i][j] = espacements1 + p + espacements1; //comme ça la première case est 1 ;
+                        grille[i][j] = espacements1 + p + espacements1; // comme ça la première case est 1 ;
                 }
             }
         }
-        printGrille(grille,n);
+
+        printGrille(grille , n);
+
         System.out.println("________________________________");
     }
 
@@ -106,7 +170,7 @@ public class Morpion2D {
     //return boolean, true si le pion a été placé, false sinon
     public boolean placer(int choix,int joueur)
     {//vérifications choix appartient à [1, n]
-        if ((choix>=1)&&(choix<=this.n*this.n))
+        if ((choix>=1)&&(choix<=this.taille *this.taille))
         {
             if (joueur==1){
                 if (this.tab[choix-1]!=2)
@@ -157,10 +221,10 @@ public class Morpion2D {
 
     //transforme le tableau 1D en grille 2D
     public int[][] grille() {
-        int[][] grille = new int[this.n][this.n];
-        for (int i = 0; i < this.n; i++) {
-            for (int j = 0; j < this.n; j++) {
-                grille[i][j] = this.tab[i * this.n + j];
+        int[][] grille = new int[this.taille][this.taille];
+        for (int i = 0; i < this.taille; i++) {
+            for (int j = 0; j < this.taille; j++) {
+                grille[i][j] = this.tab[i * this.taille + j];
             }
         }
         return grille;
@@ -172,9 +236,9 @@ public class Morpion2D {
     public int[] alignement(int choix) throws Exception{
         int[][] grille = grille();
         int[] tab = this.tab;
-        printGrille(grille, this.n);
+        printGrille(grille, this.taille);
         System.out.println("_____");
-        int n = this.n;
+        int n = this.taille;
         int[] indices = new int[n];
         // vérifie les indices donnés
         if ((choix < 1) || (choix >n*n)) {
@@ -335,7 +399,7 @@ public class Morpion2D {
 
     public int[] finPartie()
     {
-        int[] indices=new int[this.n];//pour une grille de taille normale 3x3 il faut aligner 3 éléments
+        int[] indices= new int[this.taille];//pour une grille de taille normale 3x3 il faut aligner 3 éléments
         int[][] grille= grille(); //plus simple pour vérifier si on est aligné
         return indices;
     }
