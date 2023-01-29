@@ -48,6 +48,18 @@ public class Morpion2D {
         }
     }
 
+    //fonction auxiliaire de afficher qui permet de générer le bon nombre d'espace en fonction d'un entier
+    public String printspaces(int mult)
+    {
+        if (mult<=0) return "";
+        String spaces=" ";
+        for (int i=0; i<mult; i++)
+        {
+            spaces+=" ";
+        }
+        return spaces;
+    }
+
     //prend n, la taille de la grille (n*n) et un tableau d'une ligne
     //valeur def par la classe
     //affiche dans la console une grille avec les correspondance adéquate
@@ -59,21 +71,31 @@ public class Morpion2D {
         System.out.println("________________________________");
         int[] tab=this.tab;
         int n=this.n;
+        int spacesmax=String.valueOf((n-1)*n+(n-1)+1).length()/2;
+        if (spacesmax<3){spacesmax=3/3;}
+        String espacements1=printspaces(spacesmax);
+        String espacements2=printspaces(spacesmax-1);
         String[][] grille = new String[n][n];
         for (int i = 0; i < n; i++)
         {
             for (int j = 0; j < n; j++)
             {
                 if (tab[i*n+j]==1)
-                    grille[i][j] = " \033[1;31mX\033[0m ";
+                    grille[i][j] = espacements1 +"\033[1;31mX\033[0m"+ espacements1;
                 else if (tab[i*n+j]==2)
-                    grille[i][j] = " \033[1;34mO\033[0m ";
+                    grille[i][j] = espacements1+ "\033[1;34mO\033[0m"+ espacements1;
                 else if (tab[i*n+j]==-1)
-                    grille[i][j] = "\033[1;31m[X]\033[0m";
+                    grille[i][j] = espacements1+"\033[1;31m[X]\033[0m"+espacements2;
                 else if (tab[i*n+j]==-2)
-                    grille[i][j] = "\033[1;34m[O]\033[0m";
-                else
-                    grille[i][j] = " "+String.valueOf(i*n+j+1)+" "; //comme ça la première case est 1 ;
+                    grille[i][j] = espacements1+"\033[1;34m[O]\033[0m"+espacements2;
+                else {
+                    String p = String.valueOf(i * n + j + 1);
+                    int spaces = p.length();
+                    if (spaces % 2 == 0) //si c'est pair
+                        grille[i][j] = printspaces(spacesmax - spaces - 1) + p + printspaces(spacesmax - spaces); //comme ça la première case est 1 ;
+                    else
+                        grille[i][j] = espacements1 + p + espacements1; //comme ça la première case est 1 ;
+                }
             }
         }
         printGrille(grille,n);
@@ -81,13 +103,31 @@ public class Morpion2D {
     }
 
     //placer dans un tableau à une ligne, joueur correspond au joueur qui joue 1 ou 2
-    public void placer(int choix,int joueur)
+    //return boolean, true si le pion a été placé, false sinon
+    public boolean placer(int choix,int joueur)
     {//vérifications choix appartient à [1, n]
-        System.out.println("\033[0;33mJe place mon pion :"+ choix +"\033[0m");
         if ((choix>=1)&&(choix<=this.n*this.n))
         {
-            this.tab[choix-1]=joueur;
+            if (joueur==1){
+                if (this.tab[choix-1]!=2)
+                {
+                    System.out.println("\033[0;33mLe joueur "+joueur+" place son pion :"+ choix +"\033[0m");
+                    this.tab[choix-1]=joueur;
+                    return true;
+                }
+            }
+            else if (joueur==2) {
+                if (this.tab[choix-1]!=1)
+                {
+                    System.out.println("\033[0;33mLe joueur "+joueur+" place son pion :"+ choix +"\033[0m");
+                    this.tab[choix-1]=joueur;
+                    return true;
+                }
+
+            }
         }
+        System.out.println("\033[0;33mImpossible de placer le pion, la case est occupée\033[0m");
+        return false;
     }
 
     //après vérification, on lui passe les indices gagnants et il remplace
@@ -129,19 +169,19 @@ public class Morpion2D {
     //prend en para le choix du dernier élément placer (l'indice) et retourne les indices des éléments qui sont alignés
     //on va tester si pour cet élément placé, si le joueur a réussi à aligner n éléments
     //pour un morpion 3x3 il faut en aligner 3
-    public int[] alignement(int choix) {
+    public int[] alignement(int choix) throws Exception{
         int[][] grille = grille();
         int[] tab = this.tab;
         printGrille(grille, this.n);
         System.out.println("_____");
         int n = this.n;
         int[] indices = new int[n];
-        // vérifie les lignes
+        // vérifie les indices donnés
         if ((choix < 1) || (choix >n*n)) {
-            System.out.println("l'indice du choix n'a pas la bonne valeur");
-            return indices;
+            throw new Exception("Indice du choix incorrect");
         }
-        else {
+        else
+        {
             choix=choix-1; //pour n=3 le choix va de 1 à 9 mais dans un tableau les indices vont de 0 à 8
 
             //pour tester la ligne
@@ -206,7 +246,6 @@ public class Morpion2D {
             // _ _ X _
             // _ X _ _
             // X _ _ _
-            int diagoD = choix;
             int numcolD = numcol;
             int numliD = numli;
             if ((numliD != n - 1)||(numcolD!=0)) //si ce n'est pas le cas on est pas en bas à gauche de la diagonale
@@ -243,7 +282,6 @@ public class Morpion2D {
             // _ X _ _
             // _ _ X _
             // _ _ _ X
-            int diagoG = choix;
             int numcolG = numcol;
             int numliG = numli;
             if (numcolG != n - 1) //si ce n'est pas le cas on est pas en bas à droite de la diagonale
@@ -275,6 +313,21 @@ public class Morpion2D {
                 }
             }
             return null;
+        }
+    }
+
+    //prends en para le retour de alignement(choix)
+    //alignement() est utilisée après chaque placement pour vérifier si 3 pions sont alignés pour le placement
+    //elle retourne les indices des pions alignés si c'est le cas
+    //sinon elle retourne un tableau vide
+    //endgame permet de savoir si la partie est finie ou non
+    public boolean endgame(int[] indices)
+    {
+        if (indices==null){
+            return false;
+        }
+        else{
+            return true;
         }
     }
 
