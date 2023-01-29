@@ -1,4 +1,4 @@
-import java.util.Arrays;
+package Morpions;
 
 public class Morpion2D {
     private int n; // largeur de la grille n>=3 pour un prog efficace

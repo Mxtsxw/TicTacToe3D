@@ -1,3 +1,5 @@
+package Morpions;
+
 public class Morpion3D{
     // à modifier en fonction du diagramme de classe
     private int n; // largeur du cube de grilles n>=3 pour un prog efficace
