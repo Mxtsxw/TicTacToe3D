@@ -171,6 +171,27 @@ public class Morpion3D{
             choix=choix-1; //pour n=3 le choix va de 1 à 9 mais dans un tableau les indices vont de 0 à 8
             //Pour tester les diagos des bords
 
+            //4diagos centrales
+            //cas diagoch1
+            // 1 2 3 | 1 2 3 | 1 2 3
+            // x 5 6 | 4 x 6 | 4 5 x
+            // 7 8 9 | 7 8 9 | 7 8 9
+
+            //cas diagoch2
+            // 1 2 3 | 1 2 3 | 1 2 3
+            // 4 5 x | 4 x 6 | x 5 6
+            // 7 8 9 | 7 8 9 | 7 8 9
+
+            //cas diagocv1
+            // 1 2 3 | 1 2 3 | 1 x 3
+            // 4 5 6 | 4 x 6 | 4 5 6
+            // 7 x 9 | 7 8 9 | 7 8 9
+
+            //cas diagocv2
+            // 1 2 3 | 1 2 3 | 1 x 3
+            // 4 5 6 | 4 x 6 | 4 5 6
+            // 7 x 9 | 7 8 9 | 7 8 9
+
             //8diagos sur les bords
 
             //cas diagoaa1
