@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Morpion2D {
     private int n; // largeur de la grille n>=3 pour un prog efficace
@@ -338,5 +339,95 @@ public class Morpion2D {
         int[] indices=new int[this.n];//pour une grille de taille normale 3x3 il faut aligner 3 éléments
         int[][] grille= grille(); //plus simple pour vérifier si on est aligné
         return indices;
+    }
+    public boolean endGame(int[] tab) {
+        //Vérification si le tableau est plein
+        for (int i=0;i<tab.length;i++){
+            if (tab[i] == 0)
+                return false;
+        }
+        return true;
+    }
+    public boolean estGagnant(int choice, int n, int[] tab) {
+        // Vérifier les lignes
+        for (int i = 0; i < n; i++) {
+            int c = 0;
+            for (int j = 0; j < n; j++) {
+                if (tab[i*n+j] == choice) {
+                    c++;
+                }
+            }
+            if (c == n) {
+                return true;
+            }
+        }
+        // Vérifier les colonnes
+        for (int j = 0; j < n; j++) {
+            int c = 0;
+            for (int i = 0; i < n; i++) {
+                if (tab[i*n+j] == choice) {
+                    c++;
+                }
+            }
+            if (c == n) {
+                return true;
+            }
+        }
+        // Vérifier les diagonales
+        int c = 0;
+        for (int i = 0; i < n; i++) {
+            if (tab[i*n+i] == choice) {
+                c++;
+            }
+        }
+        if (c == n) {
+            return true;
+        }
+        c = 0;
+        for (int i = 0; i < n; i++) {
+            if (tab[i*n+n-1-i] == choice) {
+                c++;
+            }
+        }
+        if (c == n) {
+            return true;
+        }
+        // Aucun alignement gagnant n'a été trouvé
+        return false;
+    }
+
+
+
+    public void start(Morpion2D game){
+        Scanner input = new Scanner(System.in);
+        boolean end =true;
+        int currentPlayer = 1;
+        while (!game.endGame(game.getTab()) && end ){
+            game.afficher();
+            System.out.println("Joueur " + currentPlayer + ", choisi une case (1-" + (getN()*getN()) + "): ");
+            int choice = input.nextInt();
+            while (choice < 1 || choice > getN()*getN() || game.getTab()[choice-1] != 0) {
+                if(choice < 1 || choice > getN()*getN()){
+                    System.out.println("Choix en dehors de la limite du tableau, veuillez réessayer.");
+                }
+                else if(game.getTab()[choice-1] != 0){
+                    System.out.println("Cette case est déjà jouée, veuillez réessayer.");
+                }
+                choice = input.nextInt();
+            }
+            game.placer(choice, currentPlayer);
+            if (estGagnant(choice, n, game.getTab())){
+                end = false;
+            }
+            if (game.endGame(game.getTab())){
+                game.afficher();
+                System.out.println("égalité vous pouvez recommencez");// juste sortir du case 1 pour rerentrer dans le launcher
+            }
+            if (currentPlayer == 1) {
+                currentPlayer = 2;
+            } else {
+                currentPlayer = 1;
+            }
+        }
     }
 }
