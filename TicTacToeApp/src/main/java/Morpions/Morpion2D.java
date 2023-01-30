@@ -4,7 +4,7 @@ package Morpions;
  * Classe Morpion2D
  * extends Morpion
  */
-public class Morpion2D {
+public class Morpion2D extends Morpion {
     private int taille;
     private String[] tab;
 
@@ -47,7 +47,9 @@ public class Morpion2D {
      * Réinitialise la grille
      */
     public void init(){
-        this.tab = new String[this.taille * this.taille];
+        for (int i = 0; i < tab.length; i++) {
+            tab[i] = String.valueOf(i + 1);
+        }
     }
 
     /**
@@ -84,7 +86,7 @@ public class Morpion2D {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < this.taille * this.taille; i++) {
-            sb.append(this.tab[i]);
+            sb.append(" " + this.tab[i] + " ");
             sb.append(" ");
             if ((i + 1) % this.taille == 0) {
                 sb.append("\n");
@@ -97,7 +99,24 @@ public class Morpion2D {
      * Fonction qui affiche sur la console le morpion
      */
     public void afficher(){
-        System.out.println(this);
+        System.out.println("--------------------------------");
+        System.out.println("--- \033[0;33mAffichage du Morpion2D\033[0m ---");
+        System.out.println("--------------------------------");
+
+        for (int i = 0; i < tab.length; i++) {
+            if (tab[i].equals("X")) {
+                System.out.print("\u001B[31m X \u001B[0m ");
+            } else if (tab[i].equals("O")) {
+                System.out.print("\u001B[34m O \u001B[0m ");
+            } else {
+                System.out.print(" " + tab[i] + " " + " ");
+            }
+            if ((i + 1) % taille == 0) {
+                System.out.println();
+            }
+        }
+        System.out.println();
+
     }
 
     /**
@@ -107,12 +126,12 @@ public class Morpion2D {
     public void afficherEmplacement(int index) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < this.taille * this.taille; i++) {
-            if (i == index) {
+            if (i == index - 1) {
                 sb.append("[");
                 sb.append(this.tab[i]);
                 sb.append("]");
             } else {
-                sb.append(this.tab[i]);
+                sb.append(" " + this.tab[i] + " ");
             }
             sb.append(" ");
             if ((i + 1) % this.taille == 0) {
@@ -129,13 +148,13 @@ public class Morpion2D {
      * @return la grille mise à jour
      */
     public void placer(int index, String value) throws IllegalArgumentException {
-        if (index < 0 || index >= this.taille * this.taille) {
+        if (index - 1 < 0 || index - 1>= this.taille * this.taille) {
             throw new IllegalArgumentException("Indice de placement invalide.");
         }
-        if (this.tab[index].equals("X") || this.tab[index].equals("O")) {
+        if (this.tab[index - 1].equals("X") || this.tab[index - 1].equals("O")) {
             throw new IllegalArgumentException("Placement impossible. Un pion est dékà présent sur cette case.");
         }
-        this.tab[index] = value;
+        this.tab[index - 1] = value;
     }
 
     /**
