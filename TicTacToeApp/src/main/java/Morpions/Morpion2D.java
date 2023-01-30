@@ -131,7 +131,7 @@ public class Morpion2D extends Morpion {
                 sb.append(this.tab[i]);
                 sb.append("]");
             } else {
-                sb.append(" " + this.tab[i] + " ");
+                sb.append(" ").append(this.tab[i]).append(" ");
             }
             sb.append(" ");
             if ((i + 1) % this.taille == 0) {
