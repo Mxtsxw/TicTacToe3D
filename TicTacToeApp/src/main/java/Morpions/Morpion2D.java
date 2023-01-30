@@ -99,9 +99,9 @@ public class Morpion2D extends Morpion {
      * Fonction qui affiche sur la console le morpion
      */
     public void afficher(){
-        System.out.println("--------------------------------");
+        System.out.println("-------------------------------");
         System.out.println("--- \033[0;33mAffichage du Morpion2D\033[0m ---");
-        System.out.println("--------------------------------");
+        System.out.println("-------------------------------");
 
         for (int i = 0; i < tab.length; i++) {
             if (tab[i].equals("X")) {
@@ -157,6 +157,17 @@ public class Morpion2D extends Morpion {
         this.tab[index - 1] = value;
     }
 
+    private boolean validIndex(int index) {
+        if (index - 1 < 0 || index - 1>= this.taille * this.taille) {
+            throw new IllegalArgumentException("Indice de placement invalide.");
+        }
+        if (this.tab[index - 1].equals("X") || this.tab[index - 1].equals("O")) {
+            throw new IllegalArgumentException("Placement impossible. Un pion est dékà présent sur cette case.");
+        }
+
+        return true;
+    }
+
     /**
      * Fonction qui vérifie si une combinaison est gagnante et marque la fin d'une partie
      * @return boolean, si une combinaison est gagnante
@@ -166,11 +177,11 @@ public class Morpion2D extends Morpion {
         for (int i = 0; i < this.taille * this.taille; i += this.taille) {
             int j;
             for (j = 1; j < this.taille; j++) {
-                if (this.tab[i] != this.tab[i + j]) {
+                if (!this.tab[i].equals(this.tab[i + j])) {
                     break;
                 }
             }
-            if (j == this.taille && this.tab[i] != "0") {
+            if (j == this.taille && !this.tab[i].equals("0")) {
                 return true;
             }
         }
@@ -179,11 +190,11 @@ public class Morpion2D extends Morpion {
         for (int i = 0; i < this.taille; i++) {
             int j;
             for (j = 1; j < this.taille; j++) {
-                if (this.tab[i] != this.tab[i + j * this.taille]) {
+                if (!this.tab[i].equals(this.tab[i + j * this.taille])) {
                     break;
                 }
             }
-            if (j == this.taille && this.tab[i] != "0") {
+            if (j == this.taille && !this.tab[i].equals("0")) {
                 return true;
             }
         }
@@ -195,20 +206,25 @@ public class Morpion2D extends Morpion {
                 break;
             }
         }
-        if (j == this.taille && this.tab[0] != "0") {
+        if (j == this.taille && !this.tab[0].equals("0")) {
             return true;
         }
 
         // Check diagonal (top-right to bottom-left)
         for (j = 1; j < this.taille; j++) {
-            if (this.tab[this.taille - 1] != this.tab[j * this.taille + this.taille - j - 1]) {
+            if (!this.tab[this.taille - 1].equals(this.tab[j * this.taille + this.taille - j - 1])) {
                 break;
             }
         }
-        if (j == this.taille && this.tab[this.taille - 1] != "0") {
-            return true;
-        }
+        return j == this.taille && !this.tab[this.taille - 1].equals("0");
+    }
 
-        return false;
+    public boolean isFull(){
+        for (String s : this.tab) {
+            if (s.equals("0")) {
+                return false;
+            }
+        }
+        return true;
     }
 }

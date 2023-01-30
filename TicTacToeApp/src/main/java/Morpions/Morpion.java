@@ -2,6 +2,10 @@ package Morpions;
 
 public class Morpion {
 
+    public boolean valideIndex(){
+        return false;
+    }
+
     public void init() {}
 
     public void afficher() {}
@@ -13,4 +17,6 @@ public class Morpion {
     public boolean checkWin() {
         return false;
     }
+
+    public boolean isFull() { return false; }
 }
