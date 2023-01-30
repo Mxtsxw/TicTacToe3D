@@ -1,14 +1,6 @@
 import Morpions.*;
 
 public class Executable {
-    private int modeJeu;
-    private boolean inGame;
-    private Morpion morpion;
-
-    public Executable(Morpion morpion){
-        this.morpion = morpion;
-    }
-
     public static void main(String[] args) {
         System.out.println("Lancement du programme");
 
@@ -26,5 +18,7 @@ public class Executable {
         m2d.placer(3, "X");
         System.out.println(m2d.checkWin());
 
+        TicTacToe Game = new TicTacToe();
+        Game.jouer();
     }
 }
