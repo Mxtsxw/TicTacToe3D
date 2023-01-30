@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="TicTacToeApp" target="17" />
+      <module name="TicTacToeApp" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>
