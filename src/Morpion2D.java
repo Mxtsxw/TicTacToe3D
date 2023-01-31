@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Morpion2D {
     private int n; // largeur de la grille n>=3 pour un prog efficace
@@ -338,5 +339,57 @@ public class Morpion2D {
         int[] indices=new int[this.n];//pour une grille de taille normale 3x3 il faut aligner 3 éléments
         int[][] grille= grille(); //plus simple pour vérifier si on est aligné
         return indices;
+    }
+    public boolean endGame(int[] tab) {
+        //Vérification si le tableau est plein
+        for (int i=0;i<tab.length;i++){
+            if (tab[i] == 0)
+                return false;
+        }
+        return true;
+    }
+
+
+    public void start() {
+        Scanner input = new Scanner(System.in);
+        boolean end = true;
+        int currentPlayer = 1;
+        while (!this.endGame(this.getTab()) && end) {
+            this.afficher();
+            System.out.println("Joueur " + currentPlayer + ", choisi une case (1-" + (getN() * getN()) + "): ");
+            int choice = 0;
+            boolean validChoice = false;
+            while (!validChoice) {
+                try {
+                    choice = input.nextInt();
+                    if (choice < 1 || choice > getN() * getN() || this.getTab()[choice - 1] != 0) {
+                        System.out.println("Choix invalide, veuillez réessayer.");
+                    } else {
+                        validChoice = true;
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Entrée invalide, veuillez entrer un entier.");
+                    input.next();
+                }
+            }
+            this.placer(choice, currentPlayer);
+            try{
+                int[] a = this.alignement(choice);
+                if (a != null){
+                    end = false;
+                    this.afficherFin(a);
+                    System.out.println("Bravo le joueur "+currentPlayer+" à gagné");
+                }
+            }catch (Exception e){
+                System.out.println(e);
+            }
+
+
+            if (currentPlayer == 1) {
+                currentPlayer = 2;
+            } else {
+                currentPlayer = 1;
+            }
+        }
     }
 }
