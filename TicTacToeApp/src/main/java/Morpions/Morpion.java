@@ -19,4 +19,11 @@ public class Morpion {
     }
 
     public boolean isFull() { return false; }
+
+    public int[] alignement() {
+        return new int[0];
+    }
+
+    public void afficherCombinaison(int[] indexes) {
+    }
 }

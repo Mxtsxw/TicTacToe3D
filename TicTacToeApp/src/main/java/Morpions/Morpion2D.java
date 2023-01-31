@@ -1,5 +1,7 @@
 package Morpions;
 
+import org.apache.maven.surefire.shade.org.apache.commons.lang3.ArrayUtils;
+
 /**
  * Classe Morpion2D
  * extends Morpion
@@ -69,14 +71,14 @@ public class Morpion2D extends Morpion {
 
 
     /**
-     * @return tab int[] l'état de la grille
+     * @return tab String[] l'état de la grille
      */
     public String[] getTab() {
         return tab;
     }
 
     /**
-     * @param tab int[] l'état de la nouvelle grille
+     * @param tab String[] l'état de la nouvelle grille
      */
     public void setTab(String[] tab) {
         this.tab = tab;
@@ -145,7 +147,6 @@ public class Morpion2D extends Morpion {
      * Fonction qui place à l'indice donnée le pion
      * @param index int     l'indice où placer le pion
      * @param value String   le charactère correspondant au pion à placer
-     * @return la grille mise à jour
      */
     public void placer(int index, String value) throws IllegalArgumentException {
         if (index - 1 < 0 || index - 1>= this.taille * this.taille) {
@@ -161,7 +162,6 @@ public class Morpion2D extends Morpion {
      * Fonction qui vérifie si le placement est possible, autrement retourne l'excpetion correspondant
      * @param index int : la position
      * @return boolean
-     * @throws IllegalArgumentException
      */
     private boolean validIndex(int index) throws IllegalArgumentException{
         if (index - 1 < 0 || index - 1>= this.taille * this.taille) {
@@ -239,7 +239,79 @@ public class Morpion2D extends Morpion {
     }
 
     /**
-     * Fonction d'affiche permettant de mettre en valeur les position en paramètre, utile pour la combinaison gagnante
+     * Fonction qui retourne les indices des éléments de la combinaison gagnante.
+     * @return int[] les indices des éléments composant la combinaison gagnante
+     */
+    public int[] alignement(){
+        // Check rows
+        for (int i = 0; i < this.taille * this.taille; i += this.taille) {
+            int j;
+            for (j = 1; j < this.taille; j++) {
+                if (!this.tab[i].equals(this.tab[i + j])) {
+                    break;
+                }
+            }
+            if (j == this.taille && !this.tab[i].equals("0")) {
+                int[] indexes = new int[this.taille];
+                for (int k = i; k < i + this.taille; k++) {
+                    indexes[k] = k;
+                }
+                return indexes;
+            }
+        }
+
+        // Check columns
+        for (int i = 0; i < this.taille; i++) {
+            int j;
+            for (j = 1; j < this.taille; j++) {
+                if (!this.tab[i].equals(this.tab[i + j * this.taille])) {
+                    break;
+                }
+            }
+            if (j == this.taille && !this.tab[i].equals("0")) {
+                int[] indexes = new int[this.taille];
+                for (int k = i; k < i + this.taille; k++) {
+                    indexes[k] = k;
+                }
+                return indexes;
+            }
+        }
+
+        // Check diagonal (top-left to bottom-right)
+        int j;
+        for (j = 1; j < this.taille; j++) {
+            if (this.tab[0] != this.tab[j * this.taille + j]) {
+                break;
+            }
+        }
+        if (j == this.taille && !this.tab[0].equals("0")) {
+            int[] indexes = new int[this.taille];
+            for (int k = 0; k < this.taille * this.taille; k += this.taille + 1) {
+                indexes[k] = 4;
+            }
+            return indexes;
+        }
+
+        // Check diagonal (top-right to bottom-left)
+        for (j = 1; j < this.taille; j++) {
+            if (!this.tab[this.taille - 1].equals(this.tab[j * this.taille + this.taille - j - 1])) {
+                break;
+            }
+        }
+        if (j == this.taille && !this.tab[this.taille - 1].equals("0")) {
+            int[] indexes = new int[this.taille];
+            for (int k = this.taille - 1; k < this.taille * this.taille - 1; k += this.taille - 1) {
+                indexes[k] = k;
+            }
+            return indexes;
+        }
+
+        return new int[this.taille];
+    }
+
+
+    /**
+     * Fonction d'affichage permettant de mettre en valeur les position en paramètre, utile pour la combinaison gagnante
      * @param indexes : les indices à mettre en valeur
      */
     public void afficherCombinaison(int[] indexes){
@@ -249,9 +321,15 @@ public class Morpion2D extends Morpion {
 
         for (int i = 0; i < tab.length; i++) {
             if (tab[i].equals("X")) {
-                System.out.print("\u001B[31m X \u001B[0m ");
+                if (ArrayUtils.contains(indexes, i))
+                    System.out.print("\u001b[32m X \u001B[0m ");
+                else
+                    System.out.print("\u001B[34m X \u001B[0m ");
             } else if (tab[i].equals("O")) {
-                System.out.print("\u001B[34m O \u001B[0m ");
+                if (ArrayUtils.contains(indexes, i))
+                    System.out.print("\u001b[32m O \u001B[0m ");
+                else
+                    System.out.print("\u001B[34m O \u001B[0m ");
             } else {
                 System.out.print(" " + tab[i] + " " + " ");
             }

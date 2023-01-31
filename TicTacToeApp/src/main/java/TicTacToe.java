@@ -9,7 +9,7 @@ public class TicTacToe {
     private Morpion morpion;
     private int joueur = 1;
 
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
 
     public int getModeJeu() {
         return modeJeu;
@@ -168,10 +168,13 @@ public class TicTacToe {
             this.morpion.afficher();
             System.out.println("Match Nul !");
         }
-        // Afficher la combinaison gagnante
 
         else {
-            this.morpion.afficher();
+
+            // Afficher la combinaison gagnante --
+            int[] combinaison = this.morpion.alignement();
+
+            this.morpion.afficherCombinaison(combinaison);
 
             // Switch pour avoir le gagnant
             if (this.joueur == 1) {
