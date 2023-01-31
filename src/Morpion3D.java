@@ -658,6 +658,15 @@ public class Morpion3D{
         }
         return new int[][]{null, null};
     }
-
+    public boolean endGame(int[] tab) {
+        //Vérification si le tableau est plein
+        for (int i=0;i<tab.length;i++){
+            for (int j=0; j<tab.length;j++){
+            if (tab[i][j] == 0)
+                return false;
+            }
+        }
+        return true;
+    }
 }
 

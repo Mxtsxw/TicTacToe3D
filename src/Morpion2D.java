@@ -348,81 +348,43 @@ public class Morpion2D {
         }
         return true;
     }
-    public boolean estGagnant(int choice, int n, int[] tab) {
-        // Vérifier les lignes
-        for (int i = 0; i < n; i++) {
-            int c = 0;
-            for (int j = 0; j < n; j++) {
-                if (tab[i*n+j] == choice) {
-                    c++;
-                }
-            }
-            if (c == n) {
-                return true;
-            }
-        }
-        // Vérifier les colonnes
-        for (int j = 0; j < n; j++) {
-            int c = 0;
-            for (int i = 0; i < n; i++) {
-                if (tab[i*n+j] == choice) {
-                    c++;
-                }
-            }
-            if (c == n) {
-                return true;
-            }
-        }
-        // Vérifier les diagonales
-        int c = 0;
-        for (int i = 0; i < n; i++) {
-            if (tab[i*n+i] == choice) {
-                c++;
-            }
-        }
-        if (c == n) {
-            return true;
-        }
-        c = 0;
-        for (int i = 0; i < n; i++) {
-            if (tab[i*n+n-1-i] == choice) {
-                c++;
-            }
-        }
-        if (c == n) {
-            return true;
-        }
-        // Aucun alignement gagnant n'a été trouvé
-        return false;
-    }
 
 
-
-    public void start(Morpion2D game){
+    public void start() {
         Scanner input = new Scanner(System.in);
-        boolean end =true;
+        boolean end = true;
         int currentPlayer = 1;
-        while (!game.endGame(game.getTab()) && end ){
-            game.afficher();
-            System.out.println("Joueur " + currentPlayer + ", choisi une case (1-" + (getN()*getN()) + "): ");
-            int choice = input.nextInt();
-            while (choice < 1 || choice > getN()*getN() || game.getTab()[choice-1] != 0) {
-                if(choice < 1 || choice > getN()*getN()){
-                    System.out.println("Choix en dehors de la limite du tableau, veuillez réessayer.");
+        while (!this.endGame(this.getTab()) && end) {
+            this.afficher();
+            System.out.println("Joueur " + currentPlayer + ", choisi une case (1-" + (getN() * getN()) + "): ");
+            int choice = 0;
+            boolean validChoice = false;
+            while (!validChoice) {
+                try {
+                    choice = input.nextInt();
+                    if (choice < 1 || choice > getN() * getN() || this.getTab()[choice - 1] != 0) {
+                        System.out.println("Choix invalide, veuillez réessayer.");
+                    } else {
+                        validChoice = true;
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Entrée invalide, veuillez entrer un entier.");
+                    input.next();
                 }
-                else if(game.getTab()[choice-1] != 0){
-                    System.out.println("Cette case est déjà jouée, veuillez réessayer.");
+            }
+            this.placer(choice, currentPlayer);
+            try{
+                int[] a = this.alignement(choice);
+                if (a != null){
+                    end = false;
+                    this.afficherFin(a);
+                    System.out.println("Bravo le joueur "+currentPlayer+" à gagné");
                 }
-                choice = input.nextInt();
+            }catch (Exception e){
+                System.out.println(e);
             }
-            game.placer(choice, currentPlayer);
-            if (estGagnant(choice, n, game.getTab())){
-                end = false;
-            }
-            if (game.endGame(game.getTab())){
-                game.afficher();
-                System.out.println("égalité vous pouvez recommencez");// juste sortir du case 1 pour rerentrer dans le launcher
-            }
+
+
             if (currentPlayer == 1) {
                 currentPlayer = 2;
             } else {
