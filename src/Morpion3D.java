@@ -33,7 +33,7 @@ public class Morpion3D{
     //return boolean, true si le pion a été placé, false sinon
     public boolean placer(int etage,int choix,int joueur)
     {//vérifications choix appartient à [1, n]
-        if ((choix>=1)&&(choix<=this.n*this.n))
+        if ((choix>=1)&&(choix<=this.n*this.n)&&(etage>=0)&&(etage<=this.n))
         {
             if (joueur==1){
                 if (this.tab[etage][choix-1]!=2)
@@ -263,7 +263,7 @@ public class Morpion3D{
                 boolean test = true;
                 for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
                 {
-                    if (grille[k][numli-k][numcol] != grille[k][numli-(k+1)][numcol]) {
+                    if (grille[k][numli-k][numcol] != grille[k+1][numli-(k+1)][numcol] || (grille[k][numli-k][numcol] == 0) || (grille[k+1][numli-(k+1)][numcol] == 0)) {
                         test = false;//s'ils sont différents ils ne sont pas alignés
                     }
                     else {
@@ -307,7 +307,7 @@ public class Morpion3D{
                 boolean test = true;
                 for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
                 {
-                    if (grille[k][numli][numcol + k] != grille[k][numli][numcol + (k + 1)]) {
+                    if ((grille[k][numli][numcol + k] != grille[k+1][numli][numcol + (k + 1)]) || (grille[k][numli][numcol + k] == 0) || (grille[k+1][numli][numcol + (k + 1)] == 0)) {
                         test = false;//s'ils sont différents ils ne sont pas alignés
                     }
                     else {
@@ -351,7 +351,7 @@ public class Morpion3D{
                 boolean test = true;
                 for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
                 {
-                    if (grille[k][numli][numcol - k] != grille[k][numli][numcol - (k + 1)]) {
+                    if ((grille[k][numli][numcol - k] != grille[k + 1][numli][numcol - (k + 1)]) || (grille[k][numli][numcol - k] == 0) ||(grille[k + 1][numli][numcol - (k + 1)] == 0)) {
                         test = false;//s'ils sont différents ils ne sont pas alignés
                     }
                     else {
@@ -391,7 +391,7 @@ public class Morpion3D{
                 boolean test = true;
                 for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
                 {
-                    if (grille[k][numli + k][numcol + k] != grille[k][numli + (k + 1)][numcol + (k + 1)]) {
+                    if (grille[k][numli + k][numcol + k] != grille[k + 1][numli + (k + 1)][numcol + (k + 1)] ||(grille[k][numli + k][numcol + k] == 0 || (grille[k + 1][numli + (k + 1)][numcol + (k + 1)] == 0) ) ) {
                         test = false;
                     } //s'ils sont différents ils ne sont pas alignés
                     else {
@@ -429,7 +429,7 @@ public class Morpion3D{
                 boolean test = true;
                 for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
                 {
-                    if (grille[k][numli + k][numcol - k] != grille[k][numli + (k + 1)][numcol -(k + 1)] ) {
+                    if (grille[k][numli + k][numcol - k] != grille[k+1][numli + (k + 1)][numcol -(k + 1)] || (grille[k][numli + k][numcol - k] == 0) || (grille[k+1][numli + (k + 1)][numcol -(k + 1)] == 0) ) {
                         test = false;
                     } //s'ils sont différents ils ne sont pas alignés
                     else {
@@ -466,7 +466,7 @@ public class Morpion3D{
                 boolean test = true;
                 for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
                 {
-                    if (grille[k][numli - k][numcol + k] != grille[k][numli - (k + 1)][numcol + k + 1] ) {
+                    if ((grille[k][numli - k][numcol + k] != grille[k + 1][numli - (k + 1)][numcol + k + 1] )|| (grille[k][numli - k][numcol + k] == 0)|| (grille[k + 1][numli - (k + 1)][numcol + k + 1] == 0) ) {
                         test = false;
                     } //s'ils sont différents ils ne sont pas alignés
                     else {
@@ -503,7 +503,7 @@ public class Morpion3D{
                 boolean test = true;
                 for (int k = 0; k < n - 1; k++)//on parcourt la colonne de choix
                 {
-                    if (grille[k][numli - k][numcol - k] != grille[k][numli - (k + 1)][numcol - (k + 1)]) {
+                    if ((grille[k][numli - k][numcol - k] != grille[k + 1][numli - (k + 1)][numcol - (k + 1)]) || (grille[k][numli - k][numcol - k] == 0) || (grille[k + 1][numli - (k + 1)][numcol - (k + 1)] ==0) ) {
                         test = false;
                     } //s'ils sont différents ils ne sont pas alignés
                     else {
@@ -531,7 +531,7 @@ public class Morpion3D{
             numcol = choix-(n*numli);
             for (int k = 0; k < n - 1; k++)//on parcours les étages avec le même choix
             {
-                if (grille [k][numli][numcol] != grille[k+1][numli][numcol] ) {
+                if (grille [k][numli][numcol] != grille[k+1][numli][numcol] || (grille [k][numli][numcol] == 0) || (grille [k][numli][numcol] == 0) ) {
                     test2 = false;
                 } //s'ils sont différents ils ne sont pas alignés
                 //par défaut, on remplit les indices
@@ -690,57 +690,51 @@ public class Morpion3D{
     }
     public void start(){
         Scanner input = new Scanner(System.in);
-        boolean end =true;
+        boolean end = true;
         int currentPlayer = 1;
-        while (!this.endGame(this.getTab()) && end ){
+        while (!this.endGame(this.getTab()) && end) {
             this.afficher();
-            System.out.println("Joueur " + currentPlayer + ", choisi une case (1-" + (getN()*getN()) + "): ");
-            int choice=-1;
-            int etage=-1;
-            while(!input.hasNextInt()) {
-                input.nextLine();
-                System.out.println("Saisie non valide, veuillez entrer un nombre entier.");
-                System.out.println("Joueur " + currentPlayer + ", choisi une case (1-" + (getN()*getN()) + "): ");
-            }
-            choice = input.nextInt();
-            System.out.println("Joueur " + currentPlayer + ", choisi un étage (0-" + getN() + "): ");
-            while(!input.hasNextInt()) {
-                input.nextLine();
-                System.out.println("Saisie non valide, veuillez entrer un nombre entier.");
-                System.out.println("Joueur " + currentPlayer + ", choisi un étage (0-" + getN() + "): ");
-            }
-            etage = input.nextInt();
-            while (choice < 1 || choice > getN()*getN() || this.getTab()[etage][choice-1] != 0 ||etage < 0 || etage > getN()) {
-                if(choice < 1 || choice > getN()*getN() || etage < 0 || etage > getN()){
-                    System.out.println("Choix en dehors de la limite du tableau, veuillez réessayer.");
-                }
-                else if(this.getTab()[etage][choice-1] != 0){
-                    System.out.println("Cette case est déjà jouée, veuillez réessayer.");
-                }
-                while(!input.hasNextInt()) {
+            System.out.println("Joueur " + currentPlayer + ", choisi une case (1-" + (getN() * getN()) + "): ");
+            int choice = -1;
+            while (choice < 1 || choice > getN() * getN()) {
+                while (!input.hasNextInt()) {
                     input.nextLine();
                     System.out.println("Saisie non valide, veuillez entrer un nombre entier.");
-                    System.out.println("Joueur " + currentPlayer + ", choisi une case (1-" + (getN()*getN()) + "): ");
+                    System.out.println("Joueur " + currentPlayer + ", choisi une case (1-" + (getN() * getN()) + "): ");
                 }
                 choice = input.nextInt();
-                while(!input.hasNextInt()) {
+                if (choice < 1 || choice > getN() * getN()) {
+                    System.out.println("Choix en dehors de la limite du tableau, veuillez réessayer.");
+                } else if (this.getTab()[getN() - 1][choice - 1] != 0) {
+                    System.out.println("Cette case est déjà jouée, veuillez réessayer.");
+                }
+            }
+
+            System.out.println("Joueur " + currentPlayer + ", choisi un étage (0-" + getN() + "): ");
+            int etage = -1;
+            while (etage < 0 || etage > getN() || this.getTab()[etage][choice - 1] != 0) {
+                while (!input.hasNextInt()) {
                     input.nextLine();
                     System.out.println("Saisie non valide, veuillez entrer un nombre entier.");
                     System.out.println("Joueur " + currentPlayer + ", choisi un étage (0-" + getN() + "): ");
                 }
                 etage = input.nextInt();
-            }
-            if (this.endGame(this.getTab())){
-                this.afficher();
-                System.out.println("égalité vous pouvez recommencez");// juste sortir du case 1 pour rerentrer dans le launcher
+                if (etage < 0 || etage > getN()) {
+                    System.out.println("Choix en dehors de la limite du tableau, veuillez réessayer.");
+                } else if (this.getTab()[etage][choice - 1] != 0) {
+                    System.out.println("Cette case est déjà jouée, veuillez réessayer.");
+                }
             }
             this.placer(etage, choice, currentPlayer);
+            System.out.println("prout");
+
             try{
                 Object[] a = this.alignement(etage, choice);
-                if (a != null){
+                int[] b = (int[]) a[0];//etages
+                int[] c = (int[]) a[1];//indices
+                if (b != null && c != null){
                     end = false;
-                    int[] b = (int[]) a[0];//etages
-                    int[] c = (int[]) a[1];//indices
+
                     this.afficherFin(b, c);
                 }
             }catch (Exception e){
