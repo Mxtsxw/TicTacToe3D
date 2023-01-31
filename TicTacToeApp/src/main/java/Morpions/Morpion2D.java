@@ -8,13 +8,12 @@ public class Morpion2D extends Morpion {
     private int taille;
     private String[] tab;
 
-
+    /**
+     * Constructeur avec spécification de la taille et préinitialisation de la grille
+     * @param n int : la dimension de la grille nxn
+     * @param tab int[] : la grille à laquelle on veut initialiser la grille
+     */
     public Morpion2D(int n, String[] tab) {
-        /**
-         * Constructeur avec spécification de la taille et préinitialisation de la grille
-         * @param n int : la dimension de la grille nxn
-         * @param tab int[] : la grille à laquelle on veut initialiser la grille
-         */
         super();
         this.taille = n;
         if (tab.length != n * n) {
@@ -23,21 +22,22 @@ public class Morpion2D extends Morpion {
         this.tab = tab;
     }
 
+    /**
+     * Constructeur par défaut, la dimension de la grille est de 3x3
+     */
     public Morpion2D(){
-        /**
-         * Constructeur par défaut, la dimension de la grille est de 3x3
-         */
         super();
         this.taille = 3;
         this.tab = new String[3*3];
 
     }
 
+    /**
+     * Constructeur où seul la dimension de la grille est spécifiée
+     * @param n int : la dimension de la grille nxn
+     */
     public Morpion2D(int n){
-        /**
-         * Constructeur où seul la dimension de la grille est spécifié
-         * @param n int : la dimension de la grille nxn
-         */
+
         super();
         this.taille = n;
         this.tab = new String[this.taille * this.taille];
@@ -157,7 +157,13 @@ public class Morpion2D extends Morpion {
         this.tab[index - 1] = value;
     }
 
-    private boolean validIndex(int index) {
+    /**
+     * Fonction qui vérifie si le placement est possible, autrement retourne l'excpetion correspondant
+     * @param index int : la position
+     * @return boolean
+     * @throws IllegalArgumentException
+     */
+    private boolean validIndex(int index) throws IllegalArgumentException{
         if (index - 1 < 0 || index - 1>= this.taille * this.taille) {
             throw new IllegalArgumentException("Indice de placement invalide.");
         }
@@ -219,6 +225,10 @@ public class Morpion2D extends Morpion {
         return j == this.taille && !this.tab[this.taille - 1].equals("0");
     }
 
+    /**
+     * Fonction qui vérifie si la grille est pleine
+     * @return boolean
+     */
     public boolean isFull(){
         for (String s : this.tab) {
             if (s.equals("0")) {
@@ -226,5 +236,29 @@ public class Morpion2D extends Morpion {
             }
         }
         return true;
+    }
+
+    /**
+     * Fonction d'affiche permettant de mettre en valeur les position en paramètre, utile pour la combinaison gagnante
+     * @param indexes : les indices à mettre en valeur
+     */
+    public void afficherCombinaison(int[] indexes){
+        System.out.println("--------------------------------------");
+        System.out.println("--- \033[0;33mAffichage de la combinaison gagnante\033[0m ---");
+        System.out.println("---------------------------------------");
+
+        for (int i = 0; i < tab.length; i++) {
+            if (tab[i].equals("X")) {
+                System.out.print("\u001B[31m X \u001B[0m ");
+            } else if (tab[i].equals("O")) {
+                System.out.print("\u001B[34m O \u001B[0m ");
+            } else {
+                System.out.print(" " + tab[i] + " " + " ");
+            }
+            if ((i + 1) % taille == 0) {
+                System.out.println();
+            }
+        }
+        System.out.println();
     }
 }

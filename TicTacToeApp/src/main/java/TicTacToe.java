@@ -35,6 +35,12 @@ public class TicTacToe {
         this.morpion = morpion;
     }
 
+    /**
+     * Séléctionne le mode de jeu et instancie le type de morpion correspondant
+     * @param mode int : le mode de jeu
+     * @param taille int : la taille de la grille
+     * @throws IllegalArgumentException
+     */
     public void selectionnerModeJeu(int mode, int taille) throws IllegalArgumentException {
         switch (mode){
             case 1:
@@ -46,7 +52,6 @@ public class TicTacToe {
                 this.modeJeu = 2;
 //                this.morpion = new Morpion3D(taille);
 //                this.morpion.init();
-
                 break;
             default:
                 throw new IllegalArgumentException("Mode de jeu inconnue");
@@ -75,12 +80,23 @@ public class TicTacToe {
 
             switch (choice) {
                 case 1:
-                    System.out.print("Entrer 1 pour morpion2D ou 2 pour morpion3D : ");
+                    System.out.println("1. Morpion2D");
+                    System.out.println("2. Morpion3D");
                     mode = scanner.nextInt();
+                    if (mode != 1 && mode != 2) {
+                        System.out.println("\u001b[33;1m" + "Mode de jeu inconnue" + "\u001b[0m");
+                        mode = 1;
+                        continue;
+                    }
                     break;
                 case 2:
                     System.out.print("Enter grid size: ");
                     size = scanner.nextInt();
+                    if (size < 2 || size > 10){
+                        System.out.println("\u001b[33;1m" + "Taille de grille non valide" + "\u001b[0m");
+                        size = 3;
+                        continue;
+                    }
                     break;
                 case 3:
                     try{
@@ -89,11 +105,10 @@ public class TicTacToe {
                         System.out.println("\u001b[33;1m" + e.getMessage() + "\u001b[0m");
                         continue;
                     }
-                    startGame();
+                    this.startGame();
                     return;
                 default:
                     System.out.println("\u001b[33;1mChoix incorrecte. Veuillez réessayer.\u001b[0m");
-                    mode = 1;
             }
         }
     }
@@ -167,6 +182,7 @@ public class TicTacToe {
 
             System.out.println("\u001b[32m" + "Victoire du joueur " + this.joueur + "\u001b[0m");
         }
-        // Proposer au joueur de rejouer
+
+        // Proposer au joueur de rejouer ?
     }
 }
