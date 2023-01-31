@@ -70,7 +70,7 @@ public class Launcher {
                 }
                 int[][] tab3D = new int[n][n * n];
                 for (int i = 0; i < n; i++) {
-                    Arrays.fill(tab[i], 0);
+                    Arrays.fill(tab3D[i], 0);
                 }
                 Morpion3D game3D = new Morpion3D(n, tab3D);
                 game3D.start();
@@ -79,9 +79,5 @@ public class Launcher {
                         System.out.println("Choix invalide, veuillez réessayer.");
                         break;
                 }
-            } catch (InputMismatchException e) {
-                System.out.println("Entrée invalide, veuillez réessayer.");
             }
         }
-    }
-}

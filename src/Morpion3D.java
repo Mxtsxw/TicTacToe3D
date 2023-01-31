@@ -1,8 +1,28 @@
+import java.util.Scanner;
+
 public class Morpion3D{
     // à modifier en fonction du diagramme de classe
     private int n; // largeur du cube de grilles n>=3 pour un prog efficace
     private int[][] tab; //3 grilles pour un 3x3 en 3D, n grilles pour un nxn en 3D:
     //pour tout i tab[k][i] est un tableau int[] contenant la grille de l'étage k (0<k<n-1) et (1<i<n)
+
+    //Getters & setters
+
+    public int getN() {
+        return n;
+    }
+
+    public void setN(int n) {
+        this.n = n;
+    }
+
+    public int[][] getTab() {
+        return tab;
+    }
+
+    public void setTab(int[][] tab) {
+        this.tab = tab;
+    }
 
     public Morpion3D(int n, int[][] tab) {
         this.n = n;
@@ -658,7 +678,7 @@ public class Morpion3D{
         }
         return new int[][]{null, null};
     }
-    public boolean endGame(int[] tab) {
+    public boolean endGame(int[][] tab) {
         //Vérification si le tableau est plein
         for (int i=0;i<tab.length;i++){
             for (int j=0; j<tab.length;j++){
@@ -667,6 +687,73 @@ public class Morpion3D{
             }
         }
         return true;
+    }
+    public void start(){
+        Scanner input = new Scanner(System.in);
+        boolean end =true;
+        int currentPlayer = 1;
+        while (!this.endGame(this.getTab()) && end ){
+            this.afficher();
+            System.out.println("Joueur " + currentPlayer + ", choisi une case (1-" + (getN()*getN()) + "): ");
+            int choice=-1;
+            int etage=-1;
+            while(!input.hasNextInt()) {
+                input.nextLine();
+                System.out.println("Saisie non valide, veuillez entrer un nombre entier.");
+                System.out.println("Joueur " + currentPlayer + ", choisi une case (1-" + (getN()*getN()) + "): ");
+            }
+            choice = input.nextInt();
+            System.out.println("Joueur " + currentPlayer + ", choisi un étage (0-" + getN() + "): ");
+            while(!input.hasNextInt()) {
+                input.nextLine();
+                System.out.println("Saisie non valide, veuillez entrer un nombre entier.");
+                System.out.println("Joueur " + currentPlayer + ", choisi un étage (0-" + getN() + "): ");
+            }
+            etage = input.nextInt();
+            while (choice < 1 || choice > getN()*getN() || this.getTab()[etage][choice-1] != 0 ||etage < 0 || etage > getN()) {
+                if(choice < 1 || choice > getN()*getN() || etage < 0 || etage > getN()){
+                    System.out.println("Choix en dehors de la limite du tableau, veuillez réessayer.");
+                }
+                else if(this.getTab()[etage][choice-1] != 0){
+                    System.out.println("Cette case est déjà jouée, veuillez réessayer.");
+                }
+                while(!input.hasNextInt()) {
+                    input.nextLine();
+                    System.out.println("Saisie non valide, veuillez entrer un nombre entier.");
+                    System.out.println("Joueur " + currentPlayer + ", choisi une case (1-" + (getN()*getN()) + "): ");
+                }
+                choice = input.nextInt();
+                while(!input.hasNextInt()) {
+                    input.nextLine();
+                    System.out.println("Saisie non valide, veuillez entrer un nombre entier.");
+                    System.out.println("Joueur " + currentPlayer + ", choisi un étage (0-" + getN() + "): ");
+                }
+                etage = input.nextInt();
+            }
+            if (this.endGame(this.getTab())){
+                this.afficher();
+                System.out.println("égalité vous pouvez recommencez");// juste sortir du case 1 pour rerentrer dans le launcher
+            }
+            this.placer(etage, choice, currentPlayer);
+            try{
+                Object[] a = this.alignement(etage, choice);
+                if (a != null){
+                    end = false;
+                    int[] b = (int[]) a[0];//etages
+                    int[] c = (int[]) a[1];//indices
+                    this.afficherFin(b, c);
+                }
+            }catch (Exception e){
+                System.out.println(e);
+            }
+
+
+            if (currentPlayer == 1) {
+                currentPlayer = 2;
+            } else {
+                currentPlayer = 1;
+            }
+        }
     }
 }
 
