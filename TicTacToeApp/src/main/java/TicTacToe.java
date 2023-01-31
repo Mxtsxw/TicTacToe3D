@@ -90,7 +90,7 @@ public class TicTacToe {
                     }
                     break;
                 case 2:
-                    System.out.print("Enter grid size: ");
+                    System.out.print("Entrer une taille de grille (entier supérieur ou égale à 3): ");
                     size = scanner.nextInt();
                     if (size < 2 || size > 10){
                         System.out.println("\u001b[33;1m" + "Taille de grille non valide" + "\u001b[0m");
@@ -117,14 +117,14 @@ public class TicTacToe {
         // Le jeu continue tant que personne n'a gagné
 
         //
-        while (!this.morpion.checkWin() || !this.morpion.isFull()){
+        while (!this.morpion.checkWin() && !this.morpion.isFull()){
             this.morpion.afficher();
             System.out.println("Joueur " + this.joueur + ", veuillez sélectionner une position pour placer votre pion : ");
             int pos = this.scanner.nextInt();
 
             // verify if the pawn can be placed
             try {
-                this.morpion.valideIndex();
+                this.morpion.validIndex(pos);
             } catch (Exception e){
                 System.out.println("\u001b[33;1m" + e.getMessage() + "\u001b[0m");
                 continue;
@@ -163,18 +163,15 @@ public class TicTacToe {
             }
         }
 
-        // Récupérer la combinaison gagnante
         if (!this.morpion.checkWin()) {
             this.morpion.afficher();
             System.out.println("Match Nul !");
         }
 
         else {
-
-            // Afficher la combinaison gagnante --
-            int[] combinaison = this.morpion.alignement();
-
-            this.morpion.afficherCombinaison(combinaison);
+            // Récupérer la combinaison gagnante
+            int[] indexes = this.morpion.alignement();
+            this.morpion.afficherCombinaison(indexes);
 
             // Switch pour avoir le gagnant
             if (this.joueur == 1) {

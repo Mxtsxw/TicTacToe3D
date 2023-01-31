@@ -1,29 +1,22 @@
 package Morpions;
 
-public class Morpion {
+public abstract class Morpion {
 
-    public boolean valideIndex(){
-        return false;
-    }
+    public abstract void init();
 
-    public void init() {}
+    public abstract void afficher();
 
-    public void afficher() {}
+    public abstract void afficherEmplacement(int index);
 
-    public void afficherEmplacement(int index) {}
+    public abstract void placer(int index, String value);
 
-    public void placer(int index, String value) {}
+    public abstract boolean checkWin();
 
-    public boolean checkWin() {
-        return false;
-    }
+    public abstract boolean isFull();
 
-    public boolean isFull() { return false; }
+    public abstract int[] alignement();
 
-    public int[] alignement() {
-        return new int[0];
-    }
+    public abstract void afficherCombinaison(int[] indexes);
 
-    public void afficherCombinaison(int[] indexes) {
-    }
+    public abstract boolean validIndex(int index);
 }

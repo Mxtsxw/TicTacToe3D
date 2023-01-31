@@ -2,6 +2,8 @@ package Morpions;
 
 import org.apache.maven.surefire.shade.org.apache.commons.lang3.ArrayUtils;
 
+import java.util.Arrays;
+
 /**
  * Classe Morpion2D
  * extends Morpion
@@ -49,9 +51,7 @@ public class Morpion2D extends Morpion {
      * Réinitialise la grille
      */
     public void init(){
-        for (int i = 0; i < tab.length; i++) {
-            tab[i] = String.valueOf(i + 1);
-        }
+        Arrays.fill(tab, "0");
     }
 
     /**
@@ -88,7 +88,14 @@ public class Morpion2D extends Morpion {
     public String toString(){
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < this.taille * this.taille; i++) {
-            sb.append(" " + this.tab[i] + " ");
+            sb.append(" ");
+            if (tab[i].equals("X"))
+                sb.append("X");
+            else if (tab[i].equals("O"))
+                sb.append("O");
+            else
+                sb.append(String.valueOf(i+1));
+            sb.append(" ");
             sb.append(" ");
             if ((i + 1) % this.taille == 0) {
                 sb.append("\n");
@@ -111,7 +118,7 @@ public class Morpion2D extends Morpion {
             } else if (tab[i].equals("O")) {
                 System.out.print("\u001B[34m O \u001B[0m ");
             } else {
-                System.out.print(" " + tab[i] + " " + " ");
+                System.out.print(" " + String.valueOf(i+1) + " " + " ");
             }
             if ((i + 1) % taille == 0) {
                 System.out.println();
@@ -130,10 +137,10 @@ public class Morpion2D extends Morpion {
         for (int i = 0; i < this.taille * this.taille; i++) {
             if (i == index - 1) {
                 sb.append("[");
-                sb.append(this.tab[i]);
+                sb.append(String.valueOf(i+1));
                 sb.append("]");
             } else {
-                sb.append(" ").append(this.tab[i]).append(" ");
+                sb.append(" ").append(String.valueOf(i+1)).append(" ");
             }
             sb.append(" ");
             if ((i + 1) % this.taille == 0) {
@@ -163,12 +170,12 @@ public class Morpion2D extends Morpion {
      * @param index int : la position
      * @return boolean
      */
-    private boolean validIndex(int index) throws IllegalArgumentException{
+    public boolean validIndex(int index) throws IllegalArgumentException{
         if (index - 1 < 0 || index - 1>= this.taille * this.taille) {
             throw new IllegalArgumentException("Indice de placement invalide.");
         }
         if (this.tab[index - 1].equals("X") || this.tab[index - 1].equals("O")) {
-            throw new IllegalArgumentException("Placement impossible. Un pion est dékà présent sur cette case.");
+            throw new IllegalArgumentException("Placement impossible. Un pion est déjà présent sur cette case.");
         }
 
         return true;
@@ -222,7 +229,11 @@ public class Morpion2D extends Morpion {
                 break;
             }
         }
-        return j == this.taille && !this.tab[this.taille - 1].equals("0");
+        if (j == this.taille && !this.tab[this.taille - 1].equals("0"))
+        {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -230,8 +241,8 @@ public class Morpion2D extends Morpion {
      * @return boolean
      */
     public boolean isFull(){
-        for (String s : this.tab) {
-            if (s.equals("0")) {
+        for (int i = 0; i < this.taille * this.taille; i++) {
+            if (this.tab[i].equals("0")){
                 return false;
             }
         }
@@ -240,9 +251,9 @@ public class Morpion2D extends Morpion {
 
     /**
      * Fonction qui retourne les indices des éléments de la combinaison gagnante.
-     * @return int[] les indices des éléments composant la combinaison gagnante
+     * @return int[] les indices des éléments composant la combinaison gagnante.
      */
-    public int[] alignement(){
+    public int[] alignement() {
         // Check rows
         for (int i = 0; i < this.taille * this.taille; i += this.taille) {
             int j;
@@ -252,11 +263,11 @@ public class Morpion2D extends Morpion {
                 }
             }
             if (j == this.taille && !this.tab[i].equals("0")) {
-                int[] indexes = new int[this.taille];
-                for (int k = i; k < i + this.taille; k++) {
-                    indexes[k] = k;
+                int[] result = new int[this.taille];
+                for (int k = 0; k < this.taille; k++) {
+                    result[k] = i + k;
                 }
-                return indexes;
+                return result;
             }
         }
 
@@ -269,27 +280,27 @@ public class Morpion2D extends Morpion {
                 }
             }
             if (j == this.taille && !this.tab[i].equals("0")) {
-                int[] indexes = new int[this.taille];
-                for (int k = i; k < i + this.taille; k++) {
-                    indexes[k] = k;
+                int[] result = new int[this.taille];
+                for (int k = 0; k < this.taille; k++) {
+                    result[k] = i + k * this.taille;
                 }
-                return indexes;
+                return result;
             }
         }
 
         // Check diagonal (top-left to bottom-right)
         int j;
         for (j = 1; j < this.taille; j++) {
-            if (this.tab[0] != this.tab[j * this.taille + j]) {
+            if (!this.tab[0].equals(this.tab[j * this.taille + j])) {
                 break;
             }
         }
         if (j == this.taille && !this.tab[0].equals("0")) {
-            int[] indexes = new int[this.taille];
-            for (int k = 0; k < this.taille * this.taille; k += this.taille + 1) {
-                indexes[k] = 4;
+            int[] result = new int[this.taille];
+            for (int k = 0; k < this.taille; k++) {
+                result[k] = k * this.taille + k;
             }
-            return indexes;
+            return result;
         }
 
         // Check diagonal (top-right to bottom-left)
@@ -299,15 +310,16 @@ public class Morpion2D extends Morpion {
             }
         }
         if (j == this.taille && !this.tab[this.taille - 1].equals("0")) {
-            int[] indexes = new int[this.taille];
-            for (int k = this.taille - 1; k < this.taille * this.taille - 1; k += this.taille - 1) {
-                indexes[k] = k;
+            int[] result = new int[this.taille];
+            for (int k = 0; k < this.taille; k++) {
+                result[k] = k * this.taille + this.taille - k - 1;
             }
-            return indexes;
+            return result;
         }
 
-        return new int[this.taille];
+        return new int[0];
     }
+
 
 
     /**
@@ -315,8 +327,8 @@ public class Morpion2D extends Morpion {
      * @param indexes : les indices à mettre en valeur
      */
     public void afficherCombinaison(int[] indexes){
-        System.out.println("--------------------------------------");
-        System.out.println("--- \033[0;33mAffichage de la combinaison gagnante\033[0m ---");
+        System.out.println("---------------------------------------");
+        System.out.println("- \033[0;33mAffichage de la combinaison gagnante\033[0m -");
         System.out.println("---------------------------------------");
 
         for (int i = 0; i < tab.length; i++) {
@@ -324,7 +336,7 @@ public class Morpion2D extends Morpion {
                 if (ArrayUtils.contains(indexes, i))
                     System.out.print("\u001b[32m X \u001B[0m ");
                 else
-                    System.out.print("\u001B[34m X \u001B[0m ");
+                    System.out.print("\u001B[31m X \u001B[0m ");
             } else if (tab[i].equals("O")) {
                 if (ArrayUtils.contains(indexes, i))
                     System.out.print("\u001b[32m O \u001B[0m ");
