@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Morpion2D {
@@ -341,37 +342,62 @@ public class Morpion2D {
 
 
 
-    public void start(Morpion2D game){
+    public int[] finPartie()
+    {
+        int[] indices=new int[this.n];//pour une grille de taille normale 3x3 il faut aligner 3 éléments
+        int[][] grille= grille(); //plus simple pour vérifier si on est aligné
+        return indices;
+    }
+    public boolean endGame(int[] tab) {
+        //Vérification si le tableau est plein
+        for (int i=0;i<tab.length;i++){
+            if (tab[i] == 0)
+                return false;
+        }
+        return true;
+    }
+
+
+    public void start() {
         Scanner input = new Scanner(System.in);
-        boolean end =true;
+        boolean end = true;
         int currentPlayer = 1;
-        while (!game.endGame(game.getTab()) && end ){
-            game.afficher();
-            System.out.println("Joueur " + currentPlayer + ", choisi une case (1-" + (getN()*getN()) + "): ");
-            int choice = input.nextInt();
-            while (choice < 1 || choice > getN()*getN() || game.getTab()[choice-1] != 0) {
-                if(choice < 1 || choice > getN()*getN()){
-                    System.out.println("Choix en dehors de la limite du tableau, veuillez réessayer.");
+        while (!this.endGame(this.getTab()) && end) {
+            this.afficher();
+            System.out.println("Joueur " + currentPlayer + ", choisi une case (1-" + (getN() * getN()) + "): ");
+            int choice = 0;
+            boolean validChoice = false;
+            while (!validChoice) {
+                try {
+                    choice = input.nextInt();
+                    if (choice < 1 || choice > getN() * getN() || this.getTab()[choice - 1] != 0) {
+                        System.out.println("Choix invalide, veuillez réessayer.");
+                    } else {
+                        validChoice = true;
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Entrée invalide, veuillez entrer un entier.");
+                    input.next();
                 }
-                else if(game.getTab()[choice-1] != 0){
-                    System.out.println("Cette case est déjà jouée, veuillez réessayer.");
+            }
+            this.placer(choice, currentPlayer);
+            try{
+                int[] a = this.alignement(choice);
+                if (a != null){
+                    end = false;
+                    this.afficherFin(a);
+                    System.out.println("Bravo le joueur "+currentPlayer+" à gagné");
                 }
-                choice = input.nextInt();
+            }catch (Exception e){
+                System.out.println(e);
             }
-            game.placer(choice, currentPlayer);
-            if (estGagnant(choice, n, game.getTab())){
-                end = false;
-            }
-            if (game.endGame(game.getTab())){
-                game.afficher();
-                System.out.println("égalité vous pouvez recommencez");// juste sortir du case 1 pour rerentrer dans le launcher
-            }
+
+
             if (currentPlayer == 1) {
                 currentPlayer = 2;
             } else {
                 currentPlayer = 1;
             }
         }
-        }
-
+    }
 }
