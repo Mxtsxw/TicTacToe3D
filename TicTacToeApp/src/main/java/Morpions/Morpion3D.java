@@ -2,9 +2,7 @@ package Morpions;
 
 import org.apache.maven.surefire.shade.org.apache.commons.lang3.ArrayUtils;
 
-import java.nio.channels.IllegalChannelGroupException;
 import java.util.Arrays;
-import java.util.Scanner;
 
 /**
  * Classe Morpion3D
@@ -388,7 +386,7 @@ public class Morpion3D extends Morpion{
 
     /**
      * Vérifie si la grille est totalement remplie
-     * @return
+     * @return boolean
      */
     @Override
     public boolean isFull() {
@@ -400,6 +398,10 @@ public class Morpion3D extends Morpion{
         return true;
     }
 
+    /**
+     * Fonction qui retourne les indices des éléments de la combinaison gagnante.
+     * @return int[] les indices des éléments composant la combinaison gagnante.
+     */
     @Override
     public int[] alignement() {
         return new int[0];
@@ -440,7 +442,7 @@ public class Morpion3D extends Morpion{
         }
     }
 
-
+// ---------------------------------------------------------------------------------------
 //    //récupère les indices gagnants testés et trouvés par la fonction alignement
 //    // et remplace ces à l'indice de ces derniers dans le tableau par
 //    // des -1 si joueur 1, des -2 si joueur 2

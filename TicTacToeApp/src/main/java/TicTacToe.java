@@ -114,7 +114,7 @@ public class TicTacToe {
                         scanner.next();
                         continue;
                     }
-                    if (size < 2 || size > 10){
+                    if (size < 3 || size > 10){
                         System.out.println("\u001b[33;1m" + "Taille de grille non valide" + "\u001b[0m");
                         size = 3;
                         continue;
