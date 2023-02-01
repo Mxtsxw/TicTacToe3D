@@ -83,13 +83,125 @@ class Morpion3DTest {
         morpion.placer(33, "X");
         assertTrue(morpion.checkWin());
 
-//        morpion.init();
-//        morpion.placer(13, "X");
-//        morpion.placer(43, "X");
-//        morpion.placer(73, "X");
-//        morpion.afficher();
-//        assertTrue(morpion.checkWin());
+        morpion.init();
+        morpion.placer(11, "X");
+        morpion.placer(12, "X");
+        morpion.placer(13, "X");
+        assertTrue(morpion.checkWin());
 
+        morpion.init();
+        morpion.placer(51, "X");
+        morpion.placer(52, "X");
+        morpion.placer(53, "X");
+        assertTrue(morpion.checkWin());
 
+        morpion.init();
+        morpion.placer(91, "X");
+        morpion.placer(92, "X");
+        morpion.placer(93, "X");
+        assertTrue(morpion.checkWin());
+
+        morpion.init();
+        morpion.placer(42, "X");
+        morpion.placer(52, "X");
+        morpion.placer(62, "X");
+        assertTrue(morpion.checkWin());
+
+        morpion.init();
+        morpion.placer(73, "X");
+        morpion.placer(53, "X");
+        morpion.placer(33, "X");
+        assertTrue(morpion.checkWin());
+
+        // Alignement en profondeur
+        morpion.init();
+        morpion.placer(11, "X");
+        morpion.placer(12, "X");
+        morpion.placer(13, "X");
+        assertTrue(morpion.checkWin());
+
+        morpion.init();
+        morpion.placer(51, "X");
+        morpion.placer(52, "X");
+        morpion.placer(53, "X");
+        assertTrue(morpion.checkWin());
+
+        morpion.init();
+        morpion.placer(91, "X");
+        morpion.placer(92, "X");
+        morpion.placer(93, "X");
+        assertTrue(morpion.checkWin());
+
+        // Diagonale profondeur horizontale
+        morpion.init();
+        morpion.placer(11, "X");
+        morpion.placer(22, "X");
+        morpion.placer(33, "X");
+        assertTrue(morpion.checkWin());
+
+        morpion.init();
+        morpion.placer(41, "X");
+        morpion.placer(52, "X");
+        morpion.placer(63, "X");
+        assertTrue(morpion.checkWin());
+
+        morpion.init();
+        morpion.placer(71, "X");
+        morpion.placer(82, "X");
+        morpion.placer(93, "X");
+        assertTrue(morpion.checkWin());
+
+        morpion.init();
+        morpion.placer(13, "X");
+        morpion.placer(22, "X");
+        morpion.placer(31, "X");
+        assertTrue(morpion.checkWin());
+
+        morpion.init();
+        morpion.placer(43, "X");
+        morpion.placer(52, "X");
+        morpion.placer(61, "X");
+        assertTrue(morpion.checkWin());
+
+        // Diagonales 3D
+        morpion.init();
+        morpion.placer(11, "X");
+        morpion.placer(52, "X");
+        morpion.placer(93, "X");
+        assertTrue(morpion.checkWin());
+
+        morpion.init();
+        morpion.placer(13, "X");
+        morpion.placer(52, "X");
+        morpion.placer(91, "X");
+        assertTrue(morpion.checkWin());
+
+        morpion.init();
+        morpion.placer(31, "X");
+        morpion.placer(52, "X");
+        morpion.placer(73, "X");
+        assertTrue(morpion.checkWin());
+
+        morpion.init();
+        morpion.placer(33, "X");
+        morpion.placer(52, "X");
+        morpion.placer(71, "X");
+        assertTrue(morpion.checkWin());
+
+    }
+
+    @Test
+    public void testCheckWinFalse(){
+        morpion.init();
+        morpion.placer(51, "X");
+        morpion.placer(62, "X");
+        morpion.placer(73, "X");
+        assertFalse(morpion.checkWin());
+
+        morpion.init();
+        morpion.placer(53, "X");
+        morpion.placer(62, "X");
+        morpion.placer(71, "X");
+        assertFalse(morpion.checkWin());
     }
 }

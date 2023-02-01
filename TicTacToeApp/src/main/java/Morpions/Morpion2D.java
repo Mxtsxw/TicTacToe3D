@@ -215,7 +215,7 @@ public class Morpion2D extends Morpion {
         // Check diagonal (top-left to bottom-right)
         int j;
         for (j = 1; j < this.taille; j++) {
-            if (this.tab[0] != this.tab[j * this.taille + j]) {
+            if (!this.tab[0].equals(this.tab[j * this.taille + j])) {
                 break;
             }
         }

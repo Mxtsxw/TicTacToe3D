@@ -249,142 +249,139 @@ public class Morpion3D extends Morpion{
         int n = this.taille;
         String[][] grid = this.tab;
 
-        int m = n * n;
-
-        // Check rows
-        for (int i = 0; i < m; i++) {
-            for (int k = 0; k < n; k++) {
+        // Vérification pour chaqué étage
+        for (int etage = 0; etage < this.taille; etage++) {
+            // Check rows
+            for (int i = 0; i < this.taille * this.taille; i += this.taille) {
                 int j;
-                for (j = 1; j < n; j++) {
-                    if (!grid[i][k].equals(grid[i][k + j])) {
+                for (j = 1; j < this.taille; j++) {
+                    if (!this.tab[etage][i].equals(this.tab[etage][i + j])) {
                         break;
                     }
                 }
-                if (j == n && !grid[i][k].equals("0")) {
+                if (j == this.taille && !this.tab[etage][i].equals("0")) {
                     return true;
                 }
             }
-        }
 
-        // Check columns
-        for (int i = 0; i < n; i++) {
-            for (int k = 0; k < n; k++) {
+            // Check columns
+            for (int i = 0; i < this.taille; i++) {
                 int j;
-                for (j = 1; j < n; j++) {
-                    if (!grid[i][k].equals(grid[i + j][k])) {
+                for (j = 1; j < this.taille; j++) {
+                    if (!this.tab[etage][i].equals(this.tab[etage][i + j * this.taille])) {
                         break;
                     }
                 }
-                if (j == n && !grid[i][k].equals("0")) {
+                if (j == this.taille && !this.tab[etage][i].equals("0")) {
                     return true;
                 }
             }
-        }
 
-        // Check depth (front to back)
-        for (int k = 0; k < n; k++) {
+            // Check diagonal (top-left to bottom-right)
             int j;
-            for (j = 1; j < n; j++) {
-                if (!grid[0][k].equals(grid[j][k])) {
+            for (j = 1; j < this.taille; j++) {
+                if (!this.tab[etage][0].equals(this.tab[etage][j * this.taille + j])) {
                     break;
                 }
             }
-            if (j == n && !grid[0][k].equals("0")) {
+            if (j == this.taille && !this.tab[etage][0].equals("0")) {
+                return true;
+            }
+
+            // Check diagonal (top-right to bottom-left)
+            for (j = 1; j < this.taille; j++) {
+                if (!this.tab[etage][this.taille - 1].equals(this.tab[etage][j * this.taille + this.taille - j - 1])) {
+                    break;
+                }
+            }
+            if (j == this.taille && !this.tab[etage][this.taille - 1].equals("0"))
+            {
                 return true;
             }
         }
 
-        // Check depth (back to front)
-        for (int k = 0; k < n; k++) {
+        // Vérification des alignements en profondeur
+        for (int i = 0; i < this.taille * this.taille; i++) {
             int j;
-            for (j = 1; j < n; j++) {
-                if (!grid[n - 1][k].equals(grid[n - 1 - j][k])) {
+            for (j = 1; j < this.taille; j++) {
+                if (!this.tab[0][i].equals(this.tab[j][i])) {
                     break;
                 }
             }
-            if (j == n && !grid[n - 1][k].equals("0")) {
+            if (j == this.taille && !this.tab[0][i].equals("0")) {
                 return true;
             }
         }
 
-        // Check diagonals in xy-plane (top-left to bottom-right)
-        for (int k = 0; k < n; k++) {
+        // Diagonale profondeur horizontale (left-to-right)
+        for (int i = 0; i < this.taille * this.taille; i += this.taille) {
             int j;
-            for (j = 1; j < n; j++) {
-                if (!grid[0][k].equals(grid[j][j + k])) {
+            for (j = 1; j < this.taille; j++) {
+                if (!this.tab[0][i].equals(this.tab[j][i + j])) {
                     break;
                 }
             }
-            if (j == n && !grid[0][k].equals("0")) {
+            if (j == this.taille && !this.tab[0][i].equals("0")) {
                 return true;
             }
         }
 
-        // Check diagonals in xy-plane (top-right to bottom-left)
-        for (int k = 0; k < n; k++) {
+        // Diagonale profondeur horizontale (right-to-left)
+        for (int i = 0; i < this.taille * this.taille; i += this.taille) {
             int j;
-            for (j = 1; j < n; j++) {
-                if (!grid[n - 1][k].equals(grid[n - 1 - j][n - 1 - j + k])) {
+            for (j = 1; j < this.taille; j++) {
+                if (!this.tab[this.taille - 1][i].equals(this.tab[this.taille - 1 - j][i + j])) {
                     break;
                 }
             }
-            if (j == n && !grid[n - 1][k].equals("0")) {
+            if (j == this.taille && !this.tab[this.taille-1][i].equals("0")) {
                 return true;
             }
         }
 
-
-        // Check diagonals in yz-plane (left-front to right-back)
-        for (int i = 0; i < n; i++) {
-            int j;
-            for (j = 1; j < n; j++) {
-                if (!grid[i][0].equals(grid[i + j][j])) {
-                    break;
-                }
-            }
-            if (j == n && !grid[i][0].equals("")) {
-                return true;
+        // Diagonale profondeur 3D (top-left to bottom-right to the back)
+        int j;
+        for (j = 1; j < this.taille; j++) {
+            if (!this.tab[0][0].equals(this.tab[j][j * this.taille + j])) {
+                break;
             }
         }
-
-        // Check diagonals in yz-plane (right-front to left-back)
-        for (int i = 0; i < n; i++) {
-            int j;
-            for (j = 1; j < n; j++) {
-                if (!grid[i][n - 1].equals(grid[i + j][n - 1 - j])) {
-                    break;
-                }
-            }
-            if (j == n && !grid[i][n - 1].equals("")) {
-                return true;
-            }
+        if (j == this.taille && !this.tab[0][0].equals("0")) {
+            return true;
         }
 
-        // Check diagonals in xz-plane (front-left to back-right)
-        for (int i = 0; i < n; i++) {
-            int j;
-            for (j = 1; j < n; j++) {
-                if (!grid[0][i].equals(grid[j][i + j])) {
-                    break;
-                }
+        // Diagonale profondeur 3D (top-left to bottom-right to the front)
+        for (j = 1; j < this.taille; j++) {
+            if (!this.tab[this.taille - 1][0].equals(this.tab[this.taille - 1 - j][j * this.taille + j])) {
+                break;
             }
-            if (j == n && !grid[0][i].equals("")) {
-                return true;
-            }
+        }
+        if (j == this.taille && !this.tab[this.taille - 1][0].equals("0")) {
+            return true;
         }
 
-        // Check diagonals in xz-plane (back-left to front-right)
-        for (int i = 0; i < n; i++) {
-            int j;
-            for (j = 1; j < n; j++) {
-                if (!grid[n - 1][i].equals(grid[n - 1 - j][i + j])) {
-                    break;
-                }
-            }
-            if (j == n && !grid[n - 1][i].equals("")) {
-                return true;
+        // Diagonale profondeur 3D (top-right to bottom-left to the back)
+        for (j = 1; j < this.taille; j++) {
+            if (!this.tab[0][this.taille - 1].equals(this.tab[j][j * this.taille + this.taille - j - 1])) {
+                break;
             }
         }
+        if (j == this.taille && !this.tab[0][this.taille - 1].equals("0"))
+        {
+            return true;
+        }
+
+        // Diagonale profondeur 3D (top-right to bottom-left to the front)
+        for (j = 1; j < this.taille; j++) {
+            if (!this.tab[this.taille - 1][this.taille - 1].equals(this.tab[this.taille - 1 - j][j * this.taille + this.taille - j - 1])) {
+                break;
+            }
+        }
+        if (j == this.taille && !this.tab[this.taille - 1][this.taille - 1].equals("0"))
+        {
+            return true;
+        }
+
         return false;
     }
 
