@@ -160,7 +160,7 @@ public class Morpion2D extends Morpion {
             throw new IllegalArgumentException("Indice de placement invalide.");
         }
         if (this.tab[index - 1].equals("X") || this.tab[index - 1].equals("O")) {
-            throw new IllegalArgumentException("Placement impossible. Un pion est dékà présent sur cette case.");
+            throw new IllegalArgumentException("Placement impossible. Un pion est déjà présent sur cette case.");
         }
         this.tab[index - 1] = value;
     }

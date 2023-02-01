@@ -8,7 +8,7 @@ public abstract class Morpion {
 
     public abstract void afficherEmplacement(int index);
 
-    public abstract void placer(int index, String value);
+    public abstract void placer(int index, String value) throws Exception;
 
     public abstract boolean checkWin();
 
