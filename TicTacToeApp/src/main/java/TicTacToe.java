@@ -3,6 +3,9 @@ import Morpions.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+/**
+ * Classe interface pour jouer au Jeu
+ */
 public class TicTacToe {
 
     private int modeJeu;
